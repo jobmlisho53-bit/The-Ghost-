@@ -1,0 +1,24 @@
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 5px;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.login-link {
+  text-decoration: none;
+  color: inherit;
+}

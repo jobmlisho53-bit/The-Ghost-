@@ -1,0 +1,73 @@
+/* Global styles for the Ghost YouTube app */
+:root {
+  --cyber-blue: #00f0ff;
+  --neon-orange: #ff4d00;
+  --matrix-green: #00ff88;
+  --hologram-purple: #b026ff;
+  --void-black: #000011;
+  --deep-space: #06061a;
+  --cyber-metal: #1a1a2e;
+  --neural-pink: #ff00d4;
+  --glitch-red: #ff003c;
+}
+
+body {
+  margin: 0;
+  font-family: 'Exo 2', sans-serif;
+  background: var(--void-black);
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hidden {
+  display: none;
+}

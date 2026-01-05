@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost YouTube | AI-Generated Video Universe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700;800;900&family=Exo+2:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --cyber-blue:#00f0ff;
+            --neon-orange:#ff4d00;
+            --matrix-green:#00ff88;
+            --hologram-purple:#b026ff;
+            --void-black:#000011;
+            --deep-space:#06061a;
+            --cyber-metal:#1a1a2e;
+            --neural-pink:#ff00d4;
+            --glitch-red:#ff003c;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html{
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: var(--void-black);
+            color:#fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        /* Animated Cyber Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index:-3;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove{
+            0%{ transform: translate(0, 0);}
+            100%{ transform: translate(50px, 50px);}
+        }
+        /* Particle Animation*/
+        .particles{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index:-2;
+            pointer-events: none;
+        }
+        .particle{
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--cyber-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--cyber-blue);
+            animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat{
+            0%{ transform: translateY(100vh); opacity: 0;}
+            10%{ opacity: 1;}
+            90%{ opacity: 1;}
+            100%{ transform: translateY(-100px); opacity: 0;}
+        }
+        /* Main Container*/
+        .main-container{
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            background: rgba(6, 6, 26, 0.7);
+            backdrop-filter: blur(20px);
+            min-height: 100vh;
+            box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.1), 0 0 100px rgba(0, 0, 0, 0.5), inset 0 0 100px rgba(0, 240, 255, 0.02);
+            overflow: hidden;
+        }
+        /* Header*/
+        .main-header{
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(6, 6, 26, 0.95), rgba(6, 6, 26, 0.8));
+            backdrop-filter: blur(20px);
+            padding: 20px 16px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+        .header-top{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo-wrapper{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-orb{
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+        .logo-orb-inner{
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, var(--cyber-blue), transparent 70%);
+            border-radius: 50%;
+            animation: orbPulse 3s ease-in-out infinite;
+            filter: blur(1px);
+            box-shadow: 0 0 30px var(--cyber-blue), inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        @keyframes orbPulse{
+            0%, 100%{ transform: scale(1); opacity: 0.7;}
+            50%{ transform: scale(1.1); opacity: 1;}
+        }
+        .logo-text{
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, var(--cyber-blue), var(--hologram-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            position: relative;
+        }
+        .logo-text::after{
+            content: 'YOUTUBE';
+            position: absolute;
+            bottom:-8px;
+            left: 0;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--matrix-green);
+            opacity: 0.8;
+        }
+        .header-controls{
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .header-icon{
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .header-icon:hover{
+            color: var(--cyber-blue);
+            transform: scale(1.1);
+        }
+        .header-icon.notification::after{
+            content:'';
+            position: absolute;
+            top:-2px;
+            right:-2px;
+            width: 8px;
+            height: 8px;
+            background: var(--glitch-red);
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        /* Search Bar*/
+        .search-container{
+            position: relative;
+        }
+        .search-bar{
+            width: 100%;
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 30px;
+            padding: 14px 20px 14px 50px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .search-bar:focus{
+            border-color: var(--cyber-blue);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+        .search-icon{
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cyber-blue);
+            font-size: 1.1rem;
+        }
+        /* Hero Section*/
+        .hero-section{
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content{
+            position: relative;
+            z-index: 2;
+        }
+        .main-headline{
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .headline-main{
+            display: block;
+            background: linear-gradient(45deg,#fff, var(--cyber-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            margin-bottom: 10px;
+        }
+        .headline-sub{
+            display: block;
+            color: var(--neon-orange);
+            font-size: 1.8rem;
+            text-shadow: 0 0 20px rgba(255, 77, 0, 0.5);
+        }
+        .hero-description{
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        .cta-container{
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .cta-button{
+            flex: 1;
+            min-width: 150px;
+            padding: 18px 25px;
+            border-radius: 15px;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-button.primary {
+            background: linear-gradient(135deg, var(--cyber-blue), var(--hologram-purple));
+            color:#000;
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+        }
+        .cta-button.primary::before{
+            content: '' ;
+            position: absolute;
+            top: 0;
+            left:-100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .cta-button.primary:hover::before{
+            left: 100%;
+        }
+        .cta-button.secondary{
+            background: rgba(255, 77, 0, 0.1);
+            color: var(--neon-orange);
+            border: 2px solid var(--neon-orange);
+            box-shadow: 0 5px 20px rgba(255, 77, 0, 0.2);
+        }
+        .cta-button.secondary:hover{
+            background: rgba(255, 77, 0, 0.2);
+            transform: translateY(-3px);
+        }
+        .ai-stats{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+        .stat-item{
+            text-align: center;
+        }
+        .stat-value{
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--cyber-blue), var(--matrix-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+        }
+        .stat-label{
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* Video Categories*/
+        .categories-section{
+            padding: 0 20px 30px;
+        }
+        .section-title{
+            font-family:'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+            color:#fff;
+        }
+        .section-title::after{
+            content: '' ;
+            position: absolute;
+            bottom:-8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyber-blue), transparent);
+            border-radius: 2px;
+        }
+        .categories-grid{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .category-card{
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .category-card::before {
+            content: '' ;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .category-card:hover::before{
+            opacity: 1;
+        }
+        .category-card:hover{
+            transform: translateY(-5px);
+            border-color: var(--cyber-blue);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+        }
+        .category-icon{
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--cyber-blue);
+        }
+        .category-title{
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color:#fff;
+        }
+        .category-desc{
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
+        }
+        /* Main Video Feed*/
+        .video-feed-section{
+            padding: 0 20px 30px;
+        }
+        .video-feed-header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .feed-tabs{
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .feed-tab{
+            padding: 10px 20px;
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 25px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .feed-tab.active{
+            background: rgba(0, 240, 255, 0.2);
+            border-color: var(--cyber-blue);
+            color: var(--cyber-blue);
+        }
+        .video-grid{
+            display : grid;
+            grid-template-columns: 1fr;
+            gap : 20px;
+        }
+        .video-item{
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .video-item:hover{
+            transform: translateY(-5px);
+            border-color: var(--cyber-blue);
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.2);
+        }
+        .video-thumbnail{
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 77, 0, 0.2));
+            overflow: hidden;
+        }
+        .video-thumbnail::after{
+            content:'';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.7));
+        }
+        .ai-badge{
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--matrix-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            padding: 5px 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            z-index: 2;
+        }
+        .play-button{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 240, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color:#000;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+        }
+        .video-item:hover .play-button{
+            opacity: 1;
+        }
+        .video-info{
+            padding: 20px;
+        }
+        .video-title{
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color:#fff;
+            line-height: 1.3;
+        }
+        .video-meta{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .video-author{
+            display: flex;
+            align-items: center;
+            gap : 8px;
+        }
+        .author-avatar{
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyber-blue), var(--neon-orange));
+        }
+        /* Shorts Section*/
+        .shorts-section{
+            padding: 0 20px 30px;
+        }
+        .shorts-header{
+            display: flex;
+            align-items: center;
+            gap : 15px;
+            margin-bottom: 20px;
+        }
+        .shorts-icon{
+            font-size: 2rem;
+            color: var(--neon-orange);
+            filter: drop-shadow(0 0 10px var(--neon-orange));
+        }
+        .shorts-container{
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 20px 0;
+            scrollbar-width: none;
+        }
+        .shorts-container::-webkit-scrollbar{
+            display: none;
+        }
+        .short-item{
+            flex: 0 0 auto;
+            width: 160px;
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 77, 0, 0.2);
+            transition: all 0.3s;
+        }
+        .short-item:hover{
+            transform: scale(1.05);
+            border-color: var(--neon-orange);
+            box-shadow: 0 10px 30px rgba(255, 77, 0, 0.3);
+        }
+        .short-thumbnail{
+            height: 220px;
+            background: linear-gradient(135deg, rgba(255, 77, 0, 0.2), rgba(176, 38, 255, 0.2));
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .short-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 77, 0, 0.9);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        .short-play{
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 77, 0, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+        .short-info{
+            padding: 15px;
+        }
+        .short-title{
+            font-weight: 600;
+            font-size: 0.95rem;
+            color:#fff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .short-stats{
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        /* Bottom Navigation*/
+        .bottom-nav{
+            position: sticky;
+            bottom: 0;
+            background: rgba(6, 6, 26, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            z-index: 1000;
+        }
+        .nav-item{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            min-width: 60px;
+        }
+        .nav-icon{
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .nav-label{
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .nav-item.active{
+            color: var(--cyber-blue);
+        }
+        .nav-item.active .nav-icon{
+            filter: drop-shadow(0 0 10px var(--cyber-blue));
+        }
+        .create-button{
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--cyber-blue), var(--hologram-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color:#000;
+            font-size: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.5);
+            z-index: 1001;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .create-button:hover{
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 15px 50px rgba(0, 240, 255, 0.7);
+        }
+        /* AI Terminal Effect*/
+        .terminal-line{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--matrix-green);
+            text-shadow: 0 0 10px var(--matrix-green);
+            font-size: 1.2rem;
+            opacity: 0;
+            z-index:-1;
+            white-space: nowrap;
+            animation: terminalFade 8s linear infinite;
+        }
+        /* Glitch Effects*/
+        .glitch-container{
+            position: relative;
+            overflow: hidden;
+        }
+        .glitch{
+            position: relative;
+        }
+        .glitch::before,
+        .glitch::after{
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch::before{
+            left: 2px;
+            text-shadow:-2px 0 var(--glitch-red);
+            animation: glitch-1 2s infinite linear alternate-reverse;
+        }
+        .glitch::after{
+            left:-2px;
+            text-shadow: 2px 0 var(--cyber-blue);
+            animation: glitch-2 3s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-1{
+            0%{ clip: rect(24px, 550px, 90px, 0);}
+            5%{ clip: rect(85px, 550px, 140px, 0);}
+            10%{ clip: rect(66px, 550px, 115px, 0);}
+            15%{ clip: rect(92px, 550px, 103px, 0);}
+            20%{ clip: rect(58px, 550px, 130px, 0);}
+            25%{ clip: rect(48px, 550px, 134px, 0);}
+            30%{ clip: rect(31px, 550px, 121px, 0);}
+            35%{ clip: rect(73px, 550px, 108px, 0);}
+            40%{ clip: rect(29px, 550px, 144px, 0);}
+            45%{ clip: rect(19px, 550px, 129px, 0);}
+            50%{ clip: rect(89px, 550px, 99px, 0);}
+            55%{ clip: rect(74px, 550px, 112px, 0);}
+            60%{ clip: rect(38px, 550px, 148px, 0);}
+            65%{ clip: rect(63px, 550px, 117px, 0);}
+            70%{ clip: rect(12px, 550px, 137px, 0);}
+            75%{ clip: rect(81px, 550px, 153px, 0);}
+            80%{ clip: rect(45px, 550px, 106px, 0);}
+            85%{ clip: rect(67px, 550px, 132px, 0);}
+            90%{ clip: rect(23px, 550px, 142px, 0);}
+            95%{ clip: rect(51px, 550px, 127px, 0);}
+            100%{ clip: rect(34px, 550px, 156px, 0);}
+        }
+        @keyframes glitch-2{
+            0%{ clip: rect(65px, 550px, 119px, 0);}
+            5%{ clip: rect(52px, 550px, 136px, 0);}
+            10%{ clip: rect(78px, 550px, 125px, 0);}
+            15%{ clip: rect(43px, 550px, 147px, 0);}
+            20%{ clip: rect(82px, 550px, 113px, 0);}
+            25%{ clip: rect(27px, 550px, 141px, 0);}
+            30%{ clip: rect(61px, 550px, 132px, 0);}
+            35%{ clip: rect(39px, 550px, 128px, 0);}
+            40%{ clip: rect(96px, 550px, 105px, 0);}
+            45%{ clip: rect(14px, 550px, 154px, 0);}
+            50%{ clip: rect(71px, 550px, 121px, 0);}
+            55%{ clip: rect(33px, 550px, 139px, 0);}
+            60%{ clip: rect(88px, 550px, 117px, 0);}
+            65%{ clip: rect(47px, 550px, 142px, 0);}
+            70%{ clip: rect(22px, 550px, 131px, 0);}
+            75%{ clip: rect(59px, 550px, 126px, 0);}
+            80%{ clip: rect(83px, 550px, 110px, 0);}
+            85%{ clip: rect(36px, 550px, 145px, 0);}
+            90%{ clip: rect(69px, 550px, 133px, 0);}
+            95%{ clip: rect(18px, 550px, 151px, 0);}
+            100%{ clip: rect(55px, 550px, 129px, 0);}
+        }
+        /* Media Queries*/
+        @media(max-width: 480px){
+            .main-headline{
+                font-size: 2rem;
+            }
+            .headline-sub{
+                font-size: 1.5rem;
+            }
+            .cta-button{
+                min-width: 100%;
+            }
+            .categories-grid{
+                grid-template-columns: 1fr;
+            }
+            .ai-stats{
+                grid-template-columns: repeat(3, 1fr);
+                gap : 15px;
+                padding : 15px;
+            }
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            .nav-label{
+                display: none;
+            }
+            .nav-item{
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements-->
+    <div class="cyber-grid"></div>
+    <div class="particles" id="particles"></div>
+    <div class="terminal-line" id="terminal"></div>
+    
+    <!-- Main Container-->
+    <div id="root">
+        <!-- React app will be mounted here -->
+    </div>
+    
+    <script>
+        // Create particle background
+        function createParticles(){
+            const container= document.getElementById('particles');
+            const particleCount= 50;
+            for(let i= 0; i< particleCount; i++){
+                const particle= document.createElement('div');
+                particle.className= 'particle';
+                // Random position
+                particle.style.left=`${Math.random()* 100}%`;
+                // Random size
+                const size= 1+ Math.random()* 3;
+                particle.style.width=`${size}px`;
+                particle.style.height=`${size}px`;
+                // Random color
+                const colors=[
+                    'var(--cyber-blue)',
+                    'var(--neon-orange)',
+                    'var(--matrix-green)',
+                    'var(--hologram-purple)'
+                ];
+                particle.style.background= colors[Math.floor(Math.random()* colors.length)];
+                // Random animation
+                const duration= 3+ Math.random()* 7;
+                const delay = Math.random()* 5;
+                particle.style.animationDuration=`${duration}s`;
+                particle.style.animationDelay=`${delay}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        // Terminal messages
+        const terminalMessages=[
+            "> INITIALIZING NEURAL NETWORKS...",
+            "> VIDEO SYNTHESIS: 98.7% REALISM ACHIEVED",
+            "> GENERATING CINEMATIC CONTENT...",
+            "> GHOST YOUTUBE v4.7 ONLINE",
+            "> AI MODELS: 3,542 ACTIVE",
+            "> PROCESSING USER REQUEST...",
+            "> RENDERING VIDEO: COMPLETE"
+        ];
+
+        function runTerminal(){
+            const terminal= document.getElementById('terminal');
+            let messageIndex= 0;
+            function showNextMessage(){
+                terminal.textContent= terminalMessages[messageIndex];
+                terminal.style.animation='none';
+                void terminal.offsetWidth;// Trigger reflow
+                terminal.style.animation='terminalFade 8s linear infinite';
+                messageIndex=(messageIndex+ 1)% terminalMessages.length;
+                // Random interval between messages
+                const nextInterval= 8000+ Math.random()* 5000;
+                setTimeout(showNextMessage, nextInterval);
+            }
+            showNextMessage();
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function(){
+            createParticles();
+            runTerminal();
+        });
+    </script>
+</body>
+</html>
