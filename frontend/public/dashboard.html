@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Creators | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700;800;900&family=Exo+2:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --cyber-blue:#00f0ff;
+            --neon-orange:#ff4d00;
+            --matrix-green:#00ff88;
+            --hologram-purple:#b026ff;
+            --void-black:#000011;
+            --deep-space:#06061a;
+            --cyber-metal:#1a1a2e;
+            --neural-pink:#ff00d4;
+            --glitch-red:#ff003c;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html{
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: var(--void-black);
+            color:#fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        /* Animated Cyber Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index:-3;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove{
+            0%{ transform: translate(0, 0);}
+            100%{ transform: translate(50px, 50px);}
+        }
+        /* Particle Animation*/
+        .particles{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index:-2;
+            pointer-events: none;
+        }
+        .particle{
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--cyber-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--cyber-blue);
+            animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat{
+            0%{ transform: translateY(100vh); opacity: 0;}
+            10%{ opacity: 1;}
+            90%{ opacity: 1;}
+            100%{ transform: translateY(-100px); opacity: 0;}
+        }
+        /* Main Container*/
+        .main-container{
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            background: rgba(6, 6, 26, 0.7);
+            backdrop-filter: blur(20px);
+            min-height: 100vh;
+            box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.1), 0 0 100px rgba(0, 0, 0, 0.5), inset 0 0 100px rgba(0, 240, 255, 0.02);
+            overflow: hidden;
+        }
+        /* Header*/
+        .main-header{
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(6, 6, 26, 0.95), rgba(6, 6, 26, 0.8));
+            backdrop-filter: blur(20px);
+            padding: 20px 16px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+        .header-top{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo-wrapper{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-orb{
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+        .logo-orb-inner{
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, var(--cyber-blue), transparent 70%);
+            border-radius: 50%;
+            animation: orbPulse 3s ease-in-out infinite;
+            filter: blur(1px);
+            box-shadow: 0 0 30px var(--cyber-blue), inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        @keyframes orbPulse{
+            0%, 100%{ transform: scale(1); opacity: 0.7;}
+            50%{ transform: scale(1.1); opacity: 1;}
+        }
+        .logo-text{
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, var(--cyber-blue), var(--hologram-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            position: relative;
+        }
+        .logo-text::after{
+            content: 'CREATORS';
+            position: absolute;
+            bottom:-8px;
+            left: 0;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--matrix-green);
+            opacity: 0.8;
+        }
+        .header-controls{
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .header-icon{
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        .header-icon:hover{
+            color: var(--cyber-blue);
+            transform: scale(1.1);
+        }
+        .header-icon.notification::after{
+            content:'';
+            position: absolute;
+            top:-2px;
+            right:-2px;
+            width: 8px;
+            height: 8px;
+            background: var(--glitch-red);
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        /* Search Bar*/
+        .search-container{
+            position: relative;
+        }
+        .search-bar{
+            width: 100%;
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 30px;
+            padding: 14px 20px 14px 50px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .search-bar:focus{
+            border-color: var(--cyber-blue);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+        .search-icon{
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cyber-blue);
+            font-size: 1.1rem;
+        }
+        /* Dashboard Content */
+        .dashboard-content{
+            padding: 20px;
+        }
+        .section-title{
+            font-family:'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+            color:#fff;
+        }
+        .section-title::after{
+            content: '' ;
+            position: absolute;
+            bottom:-8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyber-blue), transparent);
+            border-radius: 2px;
+        }
+        .user-profile-card{
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            text-align: center;
+        }
+        .user-avatar{
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyber-blue), var(--hologram-purple));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .user-name{
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--cyber-blue);
+        }
+        .user-email{
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+        .user-stats{
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 240, 255, 0.1);
+        }
+        .stat-box{
+            text-align: center;
+        }
+        .stat-value{
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--matrix-green);
+            font-family: 'Orbitron', sans-serif;
+        }
+        .stat-label{
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .requests-section{
+            margin-top: 30px;
+        }
+        .requests-list{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .request-card{
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .request-info{
+            flex: 1;
+        }
+        .request-title{
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .request-meta{
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .request-status{
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-pending{
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        .status-processing{
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--cyber-blue);
+        }
+        .status-completed{
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        .status-failed{
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        .logout-btn{
+            background: rgba(255, 77, 0, 0.1);
+            color: var(--neon-orange);
+            border: 2px solid var(--neon-orange);
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .logout-btn:hover{
+            background: rgba(255, 77, 0, 0.2);
+            transform: translateY(-3px);
+        }
+        /* Bottom Navigation*/
+        .bottom-nav{
+            position: sticky;
+            bottom: 0;
+            background: rgba(6, 6, 26, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            z-index: 1000;
+        }
+        .nav-item{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            min-width: 60px;
+        }
+        .nav-icon{
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .nav-label{
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .nav-item.active{
+            color: var(--cyber-blue);
+        }
+        .nav-item.active .nav-icon{
+            filter: drop-shadow(0 0 10px var(--cyber-blue));
+        }
+        /* Media Queries*/
+        @media(max-width: 480px){
+            .nav-label{
+                display: none;
+            }
+            .nav-item{
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements-->
+    <div class="cyber-grid"></div>
+    <div class="particles" id="particles"></div>
+    <div class="terminal-line" id="terminal"></div>
+    
+    <!-- Main Container-->
+    <div class="main-container">
+        <!-- Header-->
+        <header class="main-header">
+            <div class="header-top">
+                <div class="logo-wrapper">
+                    <div class="logo-orb">
+                        <div class="logo-orb-inner"></div>
+                    </div>
+                    <div class="logo-text">GHOST</div>
+                </div>
+                <div class="header-controls">
+                    <i class="fas fa-search header-icon"></i>
+                    <i class="fas fa-bell header-icon notification"></i>
+                    <a href="index.html" class="profile-link">
+                        <i class="fas fa-home header-icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-bar" placeholder="Search AI-generated videos...">
+            </div>
+        </header>
+        
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <h2 class="section-title">DASHBOARD</h2>
+            
+            <div class="user-profile-card">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3 class="user-name" id="user-name">Loading...</h3>
+                <p class="user-email" id="user-email">Loading...</p>
+                
+                <div class="user-stats">
+                    <div class="stat-box">
+                        <div class="stat-value" id="total-requests">0</div>
+                        <div class="stat-label">Requests</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="completed-videos">0</div>
+                        <div class="stat-label">Videos</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="ai-models">3.5K</div>
+                        <div class="stat-label">Models</div>
+                    </div>
+                </div>
+                
+                <button class="logout-btn" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> LOGOUT
+                </button>
+            </div>
+            
+            <div class="requests-section">
+                <h3 class="section-title">MY REQUESTS</h3>
+                <div class="requests-list" id="requests-list">
+                    <!-- Requests will be loaded here -->
+                    <div class="request-card">
+                        <div class="request-info">
+                            <div class="request-title">Loading requests...</div>
+                            <div class="request-meta">Please wait</div>
+                        </div>
+                        <div class="request-status status-processing">LOADING</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation-->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item" data-nav="home">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="#" class="nav-item" data-nav="explore">
+                <i class="fas fa-compass nav-icon"></i>
+                <span class="nav-label">Explore</span>
+            </a>
+            <a href="#" class="nav-item" data-nav="shorts">
+                <i class="fas fa-bolt nav-icon"></i>
+                <span class="nav-label">Shorts</span>
+            </a>
+            <a href="dashboard.html" class="nav-item active" data-nav="profile">
+                <i class="fas fa-user-circle nav-icon"></i>
+                <span class="nav-label">Profile</span>
+            </a>
+        </nav>
+    </div>
+    
+    <script src="api.js"></script>
+    <script>
+        // Function to load user profile
+        async function loadUserProfile() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await api.getUserProfile(token);
+                if (response.success) {
+                    document.getElementById('user-name').textContent = response.data.username;
+                    document.getElementById('user-email').textContent = response.data.email;
+                    
+                    // Load user requests
+                    loadUserRequests(token);
+                } else {
+                    console.error('Error loading profile:', response.error);
+                    // Redirect to login if token is invalid
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                // Redirect to login if there's an error
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Function to load user requests
+        async function loadUserRequests(token) {
+            try {
+                const response = await api.getUserRequests(token);
+                if (response.success) {
+                    const requestsContainer = document.getElementById('requests-list');
+                    requestsContainer.innerHTML = ''; // Clear loading message
+                    
+                    // Update stats
+                    document.getElementById('total-requests').textContent = response.data.length;
+                    
+                    // Count completed videos
+                    const completedCount = response.data.filter(req => req.status === 'completed').length;
+                    document.getElementById('completed-videos').textContent = completedCount;
+                    
+                    if (response.data.length === 0) {
+                        requestsContainer.innerHTML = `
+                            <div class="request-card">
+                                <div class="request-info">
+                                    <div class="request-title">No requests yet</div>
+                                    <div class="request-meta">Submit your first video request!</div>
+                                </div>
+                                <div class="request-status status-pending">EMPTY</div>
+                            </div>
+                        `;
+                    } else {
+                        response.data.forEach(request => {
+                            const statusClass = `status-${request.status}`;
+                            const statusText = request.status.toUpperCase();
+                            
+                            const requestElement = document.createElement('div');
+                            requestElement.className = 'request-card';
+                            requestElement.innerHTML = `
+                                <div class="request-info">
+                                    <div class="request-title">${request.topic}</div>
+                                    <div class="request-meta">${new Date(request.createdAt).toLocaleDateString()} • ${request.style}</div>
+                                </div>
+                                <div class="request-status ${statusClass}">${statusText}</div>
+                            `;
+                            requestsContainer.appendChild(requestElement);
+                        });
+                    }
+                } else {
+                    console.error('Error loading requests:', response.error);
+                }
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        // Create particle background
+        function createParticles(){
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            for(let i = 0; i < particleCount; i++){
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                // Random size
+                const size = 1 + Math.random() * 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                // Random color
+                const colors = [
+                    'var(--cyber-blue)',
+                    'var(--neon-orange)',
+                    'var(--matrix-green)',
+                    'var(--hologram-purple)'
+                ];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                // Random animation
+                const duration = 3 + Math.random() * 7;
+                const delay = Math.random() * 5;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        // Terminal messages
+        const terminalMessages = [
+            "> LOADING USER PROFILE...",
+            "> FETCHING VIDEO REQUESTS...",
+            "> UPDATING DASHBOARD...",
+            "> GHOST CREATORS v4.7 ONLINE",
+            "> AI MODELS: 3,542 ACTIVE",
+            "> PROCESSING USER REQUEST...",
+            "> RENDERING VIDEO: COMPLETE"
+        ];
+
+        function runTerminal(){
+            const terminal = document.getElementById('terminal');
+            let messageIndex = 0;
+            function showNextMessage(){
+                terminal.textContent = terminalMessages[messageIndex];
+                terminal.style.animation = 'none';
+                void terminal.offsetWidth; // Trigger reflow
+                terminal.style.animation = 'terminalFade 8s linear infinite';
+                messageIndex = (messageIndex + 1) % terminalMessages.length;
+                // Random interval between messages
+                const nextInterval = 8000 + Math.random() * 5000;
+                setTimeout(showNextMessage, nextInterval);
+            }
+            showNextMessage();
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function(){
+            createParticles();
+            runTerminal();
+            loadUserProfile();
+            
+            // Logout button event listener
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar');
+            searchInput.addEventListener('keypress', function(e){
+                if(e.key === 'Enter'){
+                    alert(`Searching for: "${this.value}"`);
+                    this.value = '';
+                }
+            });
+            
+            // Navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e){
+                    if (this.dataset.nav === 'profile') {
+                        // Already on profile page, do nothing
+                        e.preventDefault();
+                    } else if (this.dataset.nav === 'home') {
+                        // Go to home page
+                        window.location.href = 'index.html';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

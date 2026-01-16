@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost YouTube | AI-Generated Video Universe</title>
+    <title>Ghost Creators | AI-Generated Video Universe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700;800;900&family=Exo+2:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -141,7 +141,7 @@
             position: relative;
         }
         .logo-text::after{
-            content: 'YOUTUBE';
+            content: 'CREATORS';
             position: absolute;
             bottom:-8px;
             left: 0;
@@ -160,6 +160,7 @@
             color: rgba(255, 255, 255, 0.7);
             transition: all 0.3s;
             position: relative;
+            cursor: pointer;
         }
         .header-icon:hover{
             color: var(--cyber-blue);
@@ -175,6 +176,32 @@
             background: var(--glitch-red);
             border-radius: 50%;
             animation: pulse 1s infinite;
+        }
+        .user-info{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .user-name{
+            color: var(--cyber-blue);
+            font-weight: 600;
+        }
+        .guest-indicator{
+            background: rgba(255, 77, 0, 0.2);
+            color: var(--neon-orange);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+        .generation-counter{
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--cyber-blue);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 5px;
         }
         /* Search Bar*/
         .search-container{
@@ -237,6 +264,21 @@
             color: var(--neon-orange);
             font-size: 1.8rem;
             text-shadow: 0 0 20px rgba(255, 77, 0, 0.5);
+        }
+        .welcome-message{
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .guest-notice{
+            background: rgba(255, 77, 0, 0.1);
+            border: 1px solid rgba(255, 77, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: var(--neon-orange);
         }
         .hero-description{
             color: rgba(255, 255, 255, 0.8);
@@ -801,73 +843,732 @@
     <div class="terminal-line" id="terminal"></div>
     
     <!-- Main Container-->
-    <div id="root">
-        <!-- React app will be mounted here -->
+    <div class="main-container">
+        <!-- Header-->
+        <header class="main-header">
+            <div class="header-top">
+                <div class="logo-wrapper">
+                    <div class="logo-orb">
+                        <div class="logo-orb-inner"></div>
+                    </div>
+                    <div class="logo-text">GHOST</div>
+                </div>
+                <div class="header-controls">
+                    <i class="fas fa-search header-icon"></i>
+                    <i class="fas fa-bell header-icon notification"></i>
+                    <div class="user-info">
+                        <span class="user-name" id="display-name">User</span>
+                        <span class="guest-indicator" id="guest-indicator" style="display:none;">GUEST</span>
+                        <span class="generation-counter" id="generation-counter"></span>
+                        <a href="dashboard.html" class="profile-link">
+                            <i class="fas fa-user-circle header-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-bar" placeholder="Search AI-generated videos...">
+            </div>
+        </header>
+        
+        <!-- Hero Section-->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="main-headline glitch-container">
+                    <span class="headline-main glitch" data-text="WATCH THE FUTURE">WATCH THE FUTURE</span>
+                    <span class="headline-sub">OF AI-CREATED VIDEOS</span>
+                </h1>
+                <p class="welcome-message">
+                    Welcome back, <span id="user-greeting">User</span>! Ready to create something amazing?
+                </p>
+                
+                <!-- Guest Notice -->
+                <div class="guest-notice" id="guest-notice" style="display:none;">
+                    <i class="fas fa-user-secret"></i> You're browsing as a guest. 
+                    <br>You can generate up to 3 videos per day. <a href="signup.html" style="color:var(--cyber-blue);">Sign up</a> for unlimited access!
+                </div>
+                
+                <p class="hero-description">
+                    Explore neural networks creating cinematic masterpieces, abstract art, and hyper-realistic simulations.
+                    No cameras. No limits.
+                </p>
+                <div class="cta-container">
+                    <button class="cta-button primary" id="browse-videos-btn">
+                        <i class="fas fa-play-circle"></i> BROWSE VIDEOS
+                    </button>
+                    <button class="cta-button secondary" id="submit-topic-btn">
+                        <i class="fas fa-plus"></i> SUBMIT TOPIC
+                    </button>
+                </div>
+                <div class="ai-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">12.8M</div>
+                        <div class="stat-label">AI Videos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">98.7%</div>
+                        <div class="stat-label">Realism</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">3.5K</div>
+                        <div class="stat-label">Neural Models</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Video Categories-->
+        <section class="categories-section">
+            <h2 class="section-title">AI VIDEO CATEGORIES</h2>
+            <div class="categories-grid">
+                <div class="category-card" data-category="cinematic">
+                    <i class="fas fa-film category-icon"></i>
+                    <h3 class="category-title">Cinematic AI</h3>
+                    <p class="category-desc">Feature-length films generated by neural networks</p>
+                </div>
+                <div class="category-card" data-category="abstract">
+                    <i class="fas fa-palette category-icon"></i>
+                    <h3 class="category-title">Abstract Art</h3>
+                    <p class="category-desc">Visual experiments and AI art explorations</p>
+                </div>
+                <div class="category-card" data-category="educational">
+                    <i class="fas fa-graduation-cap category-icon"></i>
+                    <h3 class="category-title">Educational</h3>
+                    <p class="category-desc">AI-generated explanations and visual learning</p>
+                </div>
+                <div class="category-card" data-category="music">
+                    <i class="fas fa-music category-icon"></i>
+                    <h3 class="category-title">Music Visuals</h3>
+                    <p class="category-desc">AI synesthesia: seeing sound through algorithms</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Video Feed-->
+        <section class="video-feed-section">
+            <div class="video-feed-header">
+                <h2 class="section-title">RECOMMENDED</h2>
+                <div class="feed-tabs">
+                    <button class="feed-tab active" data-tab="for-you">For You</button>
+                    <button class="feed-tab" data-tab="trending">Trending</button>
+                    <button class="feed-tab" data-tab="new">New</button>
+                    <button class="feed-tab" data-tab="ai-cinema">AI Cinema</button>
+                    <button class="feed-tab" data-tab="abstract">Abstract</button>
+                </div>
+            </div>
+            <div class="video-grid" id="video-grid">
+                <!-- Video 1-->
+                <div class="video-item">
+                    <div class="video-thumbnail">
+                        <div class="ai-badge">AI GENERATED</div>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Neural Dreams: AI's Vision of Future Cities</h3>
+                        <div class="video-meta">
+                            <div class="video-author">
+                                <div class="author-avatar"></div>
+                                <span>Ghost Urban AI</span>
+                            </div>
+                            <div class="video-views">2.4M views</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 2-->
+                <div class="video-item">
+                    <div class="video-thumbnail">
+                        <div class="ai-badge">AI GENERATED</div>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Quantum Symphony: Abstract AI Visualization</h3>
+                        <div class="video-meta">
+                            <div class="video-author">
+                                <div class="author-avatar"></div>
+                                <span>Neural Art Lab</span>
+                            </div>
+                            <div class="video-views">1.8M views</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 3-->
+                <div class="video-item">
+                    <div class="video-thumbnail">
+                        <div class="ai-badge">AI GENERATED</div>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">How AI Creates Hyper-Realistic Humans</h3>
+                        <div class="video-meta">
+                            <div class="video-author">
+                                <div class="author-avatar"></div>
+                                <span>AI Explained</span>
+                            </div>
+                            <div class="video-views">3.1M views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Shorts Section-->
+        <section class="shorts-section">
+            <div class="shorts-header">
+                <i class="fas fa-bolt shorts-icon"></i>
+                <h2 class="section-title">AI SHORTS</h2>
+            </div>
+            <div class="shorts-container" id="shorts-container">
+                <!-- Short 1-->
+                <div class="short-item">
+                    <div class="short-thumbnail">
+                        <div class="short-badge">SHORT</div>
+                        <div class="short-play">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="short-info">
+                        <h3 class="short-title">AI Creates 60s Horror Film</h3>
+                        <div class="short-stats">
+                            <span>457K views</span>
+                            <span>1:02</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Short 2-->
+                <div class="short-item">
+                    <div class="short-thumbnail">
+                        <div class="short-badge">SHORT</div>
+                        <div class="short-play">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="short-info">
+                        <h3 class="short-title">AI Comedy: Robot Standup</h3>
+                        <div class="short-stats">
+                            <span>892K views</span>
+                            <span>0:48</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Short 3-->
+                <div class="short-item">
+                    <div class="short-thumbnail">
+                        <div class="short-badge">SHORT</div>
+                        <div class="short-play">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="short-info">
+                        <h3 class="short-title">How AI Sees Music</h3>
+                        <div class="short-stats">
+                            <span>1.2M views</span>
+                            <span>0:59</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Short 4-->
+                <div class="short-item">
+                    <div class="short-thumbnail">
+                        <div class="short-badge">SHORT</div>
+                        <div class="short-play">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="short-info">
+                        <h3 class="short-title">AI Future Predictions</h3>
+                        <div class="short-stats">
+                            <span>764K views</span>
+                            <span>0:52</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Create Button-->
+        <button class="create-button" id="create-btn">
+            <i class="fas fa-plus"></i>
+        </button>
+        
+        <!-- Bottom Navigation-->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item active" data-nav="home">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="#" class="nav-item" data-nav="explore">
+                <i class="fas fa-compass nav-icon"></i>
+                <span class="nav-label">Explore</span>
+            </a>
+            <a href="#" class="nav-item" data-nav="shorts">
+                <i class="fas fa-bolt nav-icon"></i>
+                <span class="nav-label">Shorts</span>
+            </a>
+            <a href="dashboard.html" class="nav-item" data-nav="profile">
+                <i class="fas fa-user-circle nav-icon"></i>
+                <span class="nav-label">Profile</span>
+            </a>
+        </nav>
     </div>
     
+    <script src="api.js"></script>
     <script>
+        // Track guest generation count in localStorage
+        function updateGuestGenerationCount() {
+            const isGuest = localStorage.getItem('isGuest');
+            if (!isGuest) return;
+            
+            // Get current count from localStorage
+            let count = parseInt(localStorage.getItem('guestGenerationCount') || '0');
+            
+            // Update the counter display
+            const counterEl = document.getElementById('generation-counter');
+            if (counterEl) {
+                counterEl.textContent = `${count}/3`;
+            }
+        }
+
+        // Check authentication status on page load
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            const isGuest = localStorage.getItem('isGuest');
+            
+            if (!token && !isGuest) {
+                // Redirect to landing page if not authenticated and not a guest
+                window.location.href = 'landing.html';
+                return;
+            }
+            
+            if (token && user) {
+                // User is logged in, display their info
+                const userData = JSON.parse(user);
+                document.getElementById('display-name').textContent = userData.username;
+                document.getElementById('user-greeting').textContent = userData.username;
+                
+                // Hide guest indicator
+                document.getElementById('guest-indicator').style.display = 'none';
+                document.getElementById('guest-notice').style.display = 'none';
+            } else if (isGuest) {
+                // Guest user
+                document.getElementById('display-name').textContent = 'Guest';
+                document.getElementById('user-greeting').textContent = 'Guest';
+                
+                // Show guest indicator
+                document.getElementById('guest-indicator').style.display = 'inline';
+                document.getElementById('guest-notice').style.display = 'block';
+                
+                // Update generation counter
+                updateGuestGenerationCount();
+            }
+        }
+
         // Create particle background
         function createParticles(){
-            const container= document.getElementById('particles');
-            const particleCount= 50;
-            for(let i= 0; i< particleCount; i++){
-                const particle= document.createElement('div');
-                particle.className= 'particle';
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            for(let i = 0; i < particleCount; i++){
+                const particle = document.createElement('div');
+                particle.className = 'particle';
                 // Random position
-                particle.style.left=`${Math.random()* 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
                 // Random size
-                const size= 1+ Math.random()* 3;
-                particle.style.width=`${size}px`;
-                particle.style.height=`${size}px`;
+                const size = 1 + Math.random() * 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
                 // Random color
-                const colors=[
+                const colors = [
                     'var(--cyber-blue)',
                     'var(--neon-orange)',
                     'var(--matrix-green)',
                     'var(--hologram-purple)'
                 ];
-                particle.style.background= colors[Math.floor(Math.random()* colors.length)];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                 // Random animation
-                const duration= 3+ Math.random()* 7;
-                const delay = Math.random()* 5;
-                particle.style.animationDuration=`${duration}s`;
-                particle.style.animationDelay=`${delay}s`;
+                const duration = 3 + Math.random() * 7;
+                const delay = Math.random() * 5;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
                 container.appendChild(particle);
             }
         }
 
         // Terminal messages
-        const terminalMessages=[
+        const terminalMessages = [
             "> INITIALIZING NEURAL NETWORKS...",
             "> VIDEO SYNTHESIS: 98.7% REALISM ACHIEVED",
             "> GENERATING CINEMATIC CONTENT...",
-            "> GHOST YOUTUBE v4.7 ONLINE",
+            "> GHOST CREATORS v4.7 ONLINE",
             "> AI MODELS: 3,542 ACTIVE",
             "> PROCESSING USER REQUEST...",
             "> RENDERING VIDEO: COMPLETE"
         ];
 
         function runTerminal(){
-            const terminal= document.getElementById('terminal');
-            let messageIndex= 0;
+            const terminal = document.getElementById('terminal');
+            let messageIndex = 0;
             function showNextMessage(){
-                terminal.textContent= terminalMessages[messageIndex];
-                terminal.style.animation='none';
-                void terminal.offsetWidth;// Trigger reflow
-                terminal.style.animation='terminalFade 8s linear infinite';
-                messageIndex=(messageIndex+ 1)% terminalMessages.length;
+                terminal.textContent = terminalMessages[messageIndex];
+                terminal.style.animation = 'none';
+                void terminal.offsetWidth; // Trigger reflow
+                terminal.style.animation = 'terminalFade 8s linear infinite';
+                messageIndex = (messageIndex + 1) % terminalMessages.length;
                 // Random interval between messages
-                const nextInterval= 8000+ Math.random()* 5000;
+                const nextInterval = 8000 + Math.random() * 5000;
                 setTimeout(showNextMessage, nextInterval);
             }
             showNextMessage();
         }
 
-        // Initialize on load
+        // API Integration Functions
+        async function loadTrendingTopics() {
+            try {
+                const data = await api.getTrendingTopics();
+                console.log('Trending topics:', data);
+                // For now, just log to console - you can update the UI with this data
+            } catch (error) {
+                console.error('Error loading trending topics:', error);
+            }
+        }
+
+        async function handleVideoRequest(topic, duration = 300, style = 'educational', language = 'en') {
+            // Get token from localStorage (assuming user is logged in)
+            const token = localStorage.getItem('token');
+            const isGuest = localStorage.getItem('isGuest');
+            
+            if (!token && isGuest) {
+                // Check if guest has reached daily limit
+                let count = parseInt(localStorage.getItem('guestGenerationCount') || '0');
+                if (count >= 3) {
+                    showAIPreview('Daily limit reached! Guests can only generate 3 videos per day. Please sign up for unlimited access.');
+                    setTimeout(() => {
+                        window.location.href = 'signup.html';
+                    }, 2000);
+                    return;
+                }
+                
+                // Increment guest generation count
+                count++;
+                localStorage.setItem('guestGenerationCount', count.toString());
+                
+                // Update the counter display
+                const counterEl = document.getElementById('generation-counter');
+                if (counterEl) {
+                    counterEl.textContent = `${count}/3`;
+                }
+            }
+            
+            if (!token && !isGuest) {
+                // Not logged in, redirect to login
+                showAIPreview('Please log in to request a video');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+
+            try {
+                showAIPreview(`Requesting AI video for: ${topic}`);
+                const response = await api.requestVideo({
+                    topic,
+                    duration,
+                    style,
+                    language
+                }, token);
+                
+                if (response.success) {
+                    showAIPreview(`Video request submitted successfully! Request ID: ${response.data._id}`);
+                } else if (response.error && response.error.includes('Daily limit reached')) {
+                    // Handle daily limit error specifically
+                    showAIPreview('Daily limit reached! Guests can only generate 3 videos per day. Please sign up for unlimited access.');
+                    setTimeout(() => {
+                        window.location.href = 'signup.html';
+                    }, 2000);
+                } else {
+                    showAIPreview(`Error: ${response.error}`);
+                }
+            } catch (error) {
+                console.error('Error requesting video:', error);
+                showAIPreview('Error submitting video request');
+            }
+        }
+
+        // Interactive elements
         document.addEventListener('DOMContentLoaded', function(){
             createParticles();
             runTerminal();
+            loadTrendingTopics();
+            checkAuthStatus();
+            
+            // Video card interactions
+            const videoItems = document.querySelectorAll('.video-item');
+            videoItems.forEach(item => {
+                item.addEventListener('click', function(){
+                    const title = this.querySelector('.video-title').textContent;
+                    showAIPreview(`Playing: ${title}`);
+                });
+            });
+            
+            // Short card interactions
+            const shortItems = document.querySelectorAll('.short-item');
+            shortItems.forEach(item => {
+                item.addEventListener('click', function(){
+                    const title = this.querySelector('.short-title').textContent;
+                    showAIPreview(`Playing: ${title} (SHORT)`);
+                });
+            });
+            
+            // Category card interactions
+            const categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function(){
+                    const title = this.querySelector('.category-title').textContent;
+                    const category = this.dataset.category;
+                    showAIPreview(`Browsing ${title} category (${category})`);
+                });
+            });
+            
+            // Tab interactions
+            const feedTabs = document.querySelectorAll('.feed-tab');
+            feedTabs.forEach(tab => {
+                tab.addEventListener('click', function(){
+                    feedTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const filter = this.textContent;
+                    const tabType = this.dataset.tab;
+                    showAIPreview(`Filtering by: ${filter} (${tabType})`);
+                });
+            });
+            
+            // CTA button interactions
+            document.getElementById('browse-videos-btn').addEventListener('click', function(){
+                showAIPreview('Browsing all AI-generated videos');
+            });
+            
+            document.getElementById('submit-topic-btn').addEventListener('click', function(){
+                // Show a prompt for topic submission
+                const topic = prompt('Enter the topic for your AI video:');
+                if (topic) {
+                    handleVideoRequest(topic);
+                }
+            });
+            
+            // Create button
+            document.getElementById('create-btn').addEventListener('click', function(){
+                // Show a prompt for topic submission
+                const topic = prompt('Enter the topic for your AI video:');
+                if (topic) {
+                    handleVideoRequest(topic);
+                }
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar');
+            searchInput.addEventListener('keypress', function(e){
+                if(e.key === 'Enter'){
+                    showAIPreview(`Searching for: "${this.value}"`);
+                    this.value = '';
+                }
+            });
+            
+            // Navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e){
+                    if (this.dataset.nav === 'profile') {
+                        const token = localStorage.getItem('token');
+                        if (!token) {
+                            // Not logged in, go to login
+                            window.location.href = 'login.html';
+                        } else {
+                            // Logged in, go to profile/dashboard
+                            window.location.href = 'dashboard.html';
+                        }
+                        e.preventDefault();
+                    } else {
+                        navItems.forEach(nav => nav.classList.remove('active'));
+                        this.classList.add('active');
+                        const label = this.querySelector('.nav-label').textContent;
+                        const navType = this.dataset.nav;
+                        showAIPreview(`Navigating to ${label} (${navType})`);
+                    }
+                });
+            });
         });
+
+        // AI Preview Modal
+        function showAIPreview(message){
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.85);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+                backdrop-filter: blur(10px);
+                animation: fadeIn 0.3s ease;
+            `;
+
+            // Create preview card
+            const preview = document.createElement('div');
+            preview.style.cssText = `
+                background: linear-gradient(135deg, rgba(6, 6, 26, 0.95), rgba(26, 26, 46, 0.95));
+                border-radius: 20px;
+                padding: 40px;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+                border: 2px solid var(--cyber-blue);
+                box-shadow: 0 0 60px rgba(0, 240, 255, 0.3);
+                position: relative;
+                overflow: hidden;
+                animation: slideUp 0.4s ease;
+            `;
+
+            // Add decorative elements
+            const cornerTL = document.createElement('div');
+            cornerTL.style.cssText = `
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 20px;
+                height: 20px;
+                border-top: 2px solid var(--cyber-blue);
+                border-left: 2px solid var(--cyber-blue);
+            `;
+
+            const cornerTR = document.createElement('div');
+            cornerTR.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                border-top: 2px solid var(--cyber-blue);
+                border-right: 2px solid var(--cyber-blue);
+            `;
+
+            const cornerBL = document.createElement('div');
+            cornerBL.style.cssText = `
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                width: 20px;
+                height: 20px;
+                border-bottom: 2px solid var(--cyber-blue);
+                border-left: 2px solid var(--cyber-blue);
+            `;
+
+            const cornerBR = document.createElement('div');
+            cornerBR.style.cssText = `
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                border-bottom: 2px solid var(--cyber-blue);
+                border-right: 2px solid var(--cyber-blue);
+            `;
+
+            // AI icon
+            const aiIcon = document.createElement('div');
+            aiIcon.innerHTML = '<i class="fas fa-robot" style="font-size: 3rem; color: var(--matrix-green); margin-bottom: 20px;"></i>';
+
+            // Message
+            const messageElement = document.createElement('h3');
+            messageElement.textContent = message;
+            messageElement.style.cssText = `
+                color: white;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+                line-height: 1.3;
+            `;
+
+            // Status
+            const status = document.createElement('p');
+            status.textContent = 'Ghost Creators AI Processing...';
+            status.style.cssText = `
+                color: var(--matrix-green);
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.9rem;
+                margin-bottom: 30px;
+                animation: pulse 1.5s infinite;
+            `;
+
+            // Close button
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'CONTINUE';
+            closeButton.style.cssText = `
+                background: linear-gradient(135deg, var(--cyber-blue), var(--hologram-purple));
+                color: #000;
+                border: none;
+                padding: 12px 30px;
+                font-family: 'Orbitron', sans-serif;
+                font-weight: 700;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.3s;
+                letter-spacing: 1px;
+            `;
+
+            closeButton.addEventListener('mouseover', function(){
+                this.style.transform = 'scale(1.05)';
+                this.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.5)';
+            });
+
+            closeButton.addEventListener('mouseout', function(){
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = 'none';
+            });
+
+            closeButton.addEventListener('click', function(){
+                document.body.removeChild(overlay);
+            });
+
+            // Assemble preview
+            preview.appendChild(cornerTL);
+            preview.appendChild(cornerTR);
+            preview.appendChild(cornerBL);
+            preview.appendChild(cornerBR);
+            preview.appendChild(aiIcon);
+            preview.appendChild(messageElement);
+            preview.appendChild(status);
+            preview.appendChild(closeButton);
+            overlay.appendChild(preview);
+
+            // Add to page
+            document.body.appendChild(overlay);
+
+            // Auto-close after 3 seconds
+            setTimeout(() => {
+                if(document.body.contains(overlay)){
+                    document.body.removeChild(overlay);
+                }
+            }, 3000);
+
+            // Add CSS animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn{ from{ opacity: 0;} to{ opacity: 1;} }
+                @keyframes slideUp{ from{ transform: translateY(30px); opacity: 0;} to{ transform: translateY(0); opacity: 1;} }
+                @keyframes pulse{ 0%, 100%{ opacity: 0.7;} 50%{ opacity: 1;} }
+            `;
+            document.head.appendChild(style);
+        }
     </script>
 </body>
 </html>

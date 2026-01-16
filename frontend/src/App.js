@@ -1,11 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContext';
 import Home from './pages/Home';
 import RequestVideo from './pages/RequestVideo';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import Register from './pages/Register';
 import Subscription from './pages/Subscription';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -25,7 +24,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route 
               path="/request" 
               element={

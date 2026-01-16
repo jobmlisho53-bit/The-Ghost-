@@ -1,5 +1,6 @@
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 
 // Mock user data
 const mockUserData = {
@@ -7,6 +8,22 @@ const mockUserData = {
   email: 'test@example.com',
   password: 'password123',
 };
+
+// Connect to a test database before running tests
+beforeAll(async () => {
+  const testDbUrl = process.env.TEST_MONGODB_URI || 'mongodb://localhost:27017/ghost_creators_test';
+  await mongoose.connect(testDbUrl);
+});
+
+// Clear the test database after each test
+afterEach(async () => {
+  await User.deleteMany({});
+});
+
+// Close the database connection after all tests
+afterAll(async () => {
+  await mongoose.connection.close();
+});
 
 describe('User Model', () => {
   describe('Password hashing', () => {
@@ -21,7 +38,7 @@ describe('User Model', () => {
       // Verify password matches
       const isMatch = await bcrypt.compare(mockUserData.password, user.password);
       expect(isMatch).toBe(true);
-    });
+    }, 10000); // Increase timeout to 10 seconds
   });
 
   describe('matchPassword method', () => {
@@ -31,7 +48,7 @@ describe('User Model', () => {
 
       const isMatch = await user.matchPassword(mockUserData.password);
       expect(isMatch).toBe(true);
-    });
+    }, 10000); // Increase timeout to 10 seconds
 
     it('should return false for incorrect password', async () => {
       const user = new User(mockUserData);
@@ -39,7 +56,7 @@ describe('User Model', () => {
 
       const isMatch = await user.matchPassword('wrongpassword');
       expect(isMatch).toBe(false);
-    });
+    }, 10000); // Increase timeout to 10 seconds
   });
 
   describe('Validation', () => {

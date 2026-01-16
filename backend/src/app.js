@@ -3,19 +3,37 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const session = require('express-session');
+const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
 const logger = require('./utils/logger');
 const errorHandler = require('./middleware/errorHandler');
 
+// Initialize Passport
+require('./config/passport');
+
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const contentRoutes = require('./routes/contentRoutes');
-const aiRoutes = require('./routes/aiRoutes');
+const oauthRoutes = require('./routes/oauthRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
+
+// Session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'fallback_secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set to true in production with HTTPS
+}));
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Security middleware
 app.use(helmet());
@@ -41,13 +59,21 @@ connectDB();
 
 // API routes
 app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/auth', oauthRoutes); // OAuth routes
 app.use('/api/v1/content', contentRoutes);
-app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+
+// Serve static files (frontend)
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Catch-all handler for frontend routes (SPA)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
 });
 
 // Error handling middleware
@@ -57,6 +83,7 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
+  logger.info(`Access the application at http://localhost:${PORT}`);
 });
 
 // Graceful shutdown

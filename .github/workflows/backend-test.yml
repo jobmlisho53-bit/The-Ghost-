@@ -1,0 +1,66 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'backend/package-lock.json' # or package.json
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./backend
+
+    - name: Run linting (optional)
+      run: npm run lint # Add this script to your backend package.json if you have linting set up
+      working-directory: ./backend
+      continue-on-error: true
+
+    - name: Run tests
+      run: npm test # Make sure you have a "test" script in your backend package.json
+      working-directory: ./backend
+      env:
+        CI: true
+        # Add any environment variables needed for tests
+        MONGODB_URI: mongodb://localhost:27017/ghost_creators_test # Example for testing
+        JWT_SECRET: test_secret_key
+        JWT_EXPIRE: 7d
+
+    - name: Start backend server (for integration tests, optional)
+      run: |
+        npm run dev & # Or however you start your dev server
+        sleep 10 # Wait for the server to start
+        # Add commands to run integration tests against the running server
+      working-directory: ./backend
+      env:
+        CI: true
+        MONGODB_URI: mongodb://localhost:27017/ghost_creators_test
+        JWT_SECRET: test_secret_key
+        JWT_EXPIRE: 7d
+      # Note: This approach is less common; unit tests are preferred in CI/CD
+
+    # Optional: Use a service container for MongoDB if needed
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'" --health-interval 10s --health-timeout 5s --health-retries 5

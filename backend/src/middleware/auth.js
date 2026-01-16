@@ -23,6 +23,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
       next();
     } catch (error) {
+      console.error('Token verification error:', error.message);
       res.status(401);
       throw new Error('Not authorized, token failed');
     }
@@ -34,37 +35,4 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Check if user has active subscription
-const checkSubscription = asyncHandler(async (req, res, next) => {
-  if (!req.user.subscription) {
-    res.status(402); // Payment Required
-    throw new Error('Active subscription required');
-  }
-
-  // Check subscription status
-  const subscription = await req.user.populate('subscription').subscription;
-  
-  if (subscription.status !== 'active') {
-    res.status(402);
-    throw new Error('Subscription is not active');
-  }
-
-  // Check quota
-  if (subscription.plan === 'free') {
-    const requestCount = await ContentRequest.countDocuments({
-      user: req.user._id,
-      createdAt: {
-        $gte: new Date(new Date().setDate(new Date().getDate() - 30)) // Last 30 days
-      }
-    });
-
-    if (requestCount >= subscription.monthlyQuota) {
-      res.status(402);
-      throw new Error('Monthly quota exceeded. Please upgrade your subscription.');
-    }
-  }
-
-  next();
-});
-
-module.exports = { protect, checkSubscription };
+module.exports = { protect };

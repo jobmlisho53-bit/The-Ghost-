@@ -79,6 +79,11 @@ class AIService {
     }
   }
 
+  // Generate content from request (wrapper function)
+  async generateContentFromRequest(requestId) {
+    return await this.generateContent(requestId);
+  }
+
   // Get content generation status
   async getGenerationStatus(requestId) {
     try {

@@ -1,18 +1,15 @@
 {
   "name": "ghost-youtube-backend",
   "version": "1.0.0",
-  "description": "Backend API for Ghost YouTube",
+  "description": "Backend API for Ghost Creators",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix"
+    "test": "jest"
   },
   "keywords": ["ai", "video", "content-generation", "api"],
-  "author": "Ghost YouTube Team",
+  "author": "Ghost Creators Team",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
@@ -30,7 +27,11 @@
     "socket.io": "^4.7.2",
     "joi": "^17.9.2",
     "winston": "^3.10.0",
-    "express-async-handler": "^1.2.0"
+    "express-async-handler": "^1.2.0",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-github2": "^0.1.12",
+    "express-session": "^1.17.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",

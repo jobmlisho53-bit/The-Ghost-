@@ -1,17 +1,24 @@
 const express = require('express');
-const { 
-  requestContent, 
-  getContentRequests, 
-  getContentRequest,
+const { protect } = require('../middleware/auth');
+const guestLimit = require('../middleware/guestLimit');
+const {
+  createContentRequest,
+  getContentRequests,
   getTrendingTopics
 } = require('../controllers/contentController');
-const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.route('/request').post(protect, requestContent);
-router.route('/requests').get(protect, getContentRequests);
-router.route('/:id').get(protect, getContentRequest);
-router.route('/trending').get(getTrendingTopics);
+// Apply guest limit middleware to video request endpoint
+router.route('/request')
+  .post(guestLimit, protect, createContentRequest);
+
+// Apply auth protection to user's requests
+router.route('/requests')
+  .get(protect, getContentRequests);
+
+// Public endpoint for trending topics
+router.route('/trending')
+  .get(getTrendingTopics);
 
 module.exports = router;

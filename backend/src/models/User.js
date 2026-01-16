@@ -63,24 +63,24 @@ const userSchema = new mongoose.Schema({
 
 // Encrypt password using bcrypt
 userSchema.pre('save', async function (next) {
+  // Only hash password if it's modified (or new)
   if (!this.isModified('password')) {
     next();
+    return;
   }
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
-};
-
-// Generate token
-userSchema.methods.generateToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
 };
 
 module.exports = mongoose.model('User', userSchema);

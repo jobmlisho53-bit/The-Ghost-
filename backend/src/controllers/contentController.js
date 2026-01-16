@@ -1,119 +1,129 @@
 const asyncHandler = require('express-async-handler');
 const ContentRequest = require('../models/ContentRequest');
-const GeneratedVideo = require('../models/GeneratedVideo');
 const User = require('../models/User');
 const aiService = require('../services/aiService');
 const logger = require('../utils/logger');
 
-// @desc    Request AI-generated content
+// @desc    Create content request
 // @route   POST /api/v1/content/request
-// @access  Private
-const requestContent = asyncHandler(async (req, res) => {
+// @access  Private (or limited for guests)
+const createContentRequest = asyncHandler(async (req, res) => {
   const { topic, duration, style, language } = req.body;
+  const userId = req.user ? req.user._id : null;
+  const guestInfo = req.guestInfo;
 
+  // Validate required fields
   if (!topic) {
     res.status(400);
     throw new Error('Topic is required');
   }
 
-  const contentRequest = await ContentRequest.create({
-    user: req.user._id,
+  // Determine if this is a guest request
+  const isGuest = !userId;
+  
+  // If guest, add guest-specific tracking
+  const contentRequestData = {
+    user: userId,
     topic,
-    duration: duration || 300, // default 5 minutes
+    duration: duration || 300, // Default 5 minutes
     style: style || 'educational',
     language: language || 'en',
     status: 'pending',
-  });
+    cost: 0, // Free for now, but we could charge later
+    priority: isGuest ? 1 : 2, // Lower priority for guests
+  };
 
-  // Trigger AI generation in background
-  aiService.generateContent(contentRequest._id)
-    .catch(err => logger.error(`AI generation failed: ${err.message}`));
+  // Add guest ID if applicable
+  if (isGuest && guestInfo) {
+    contentRequestData.guestId = guestInfo.id;
+    contentRequestData.isGuest = true;
+  }
 
-  res.status(201).json({
-    success: true,
-    data: contentRequest,
-  });
+  try {
+    // Create content request
+    const contentRequest = await ContentRequest.create(contentRequestData);
+
+    // Update user's request count if authenticated
+    if (userId) {
+      await User.findByIdAndUpdate(userId, {
+        $push: { contentRequests: contentRequest._id }
+      });
+    }
+
+    // Log the request
+    logger.info(`Content request created: ${contentRequest._id} by ${isGuest ? 'guest' : 'user ' + userId}`);
+
+    // Start AI generation process (could be done asynchronously)
+    // aiService.generateContent(contentRequest._id);
+
+    res.status(201).json({
+      success: true,
+       contentRequest
+    });
+  } catch (error) {
+    logger.error(`Error creating content request: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create content request'
+    });
+  }
 });
 
 // @desc    Get user's content requests
 // @route   GET /api/v1/content/requests
 // @access  Private
 const getContentRequests = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 10;
-  const status = req.query.status;
-  
-  const filter = { user: req.user._id };
-  if (status) {
-    filter.status = status;
+  const userId = req.user._id;
+
+  try {
+    const contentRequests = await ContentRequest.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .limit(50); // Limit to last 50 requests
+
+    res.status(200).json({
+      success: true,
+      count: contentRequests.length,
+       contentRequests
+    });
+  } catch (error) {
+    logger.error(`Error fetching content requests: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch content requests'
+    });
   }
-
-  const total = await ContentRequest.countDocuments(filter);
-  const requests = await ContentRequest.find(filter)
-    .sort({ createdAt: -1 })
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .populate('video', 'url thumbnailUrl duration');
-
-  res.json({
-    success: true,
-    data: requests,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit),
-    },
-  });
-});
-
-// @desc    Get specific content request
-// @route   GET /api/v1/content/:id
-// @access  Private
-const getContentRequest = asyncHandler(async (req, res) => {
-  const contentRequest = await ContentRequest.findById(req.params.id)
-    .populate('video', 'url thumbnailUrl duration');
-
-  if (!contentRequest) {
-    res.status(404);
-    throw new Error('Content request not found');
-  }
-
-  // Check if user owns the request
-  if (contentRequest.user.toString() !== req.user._id.toString()) {
-    res.status(403);
-    throw new Error('Not authorized to access this content');
-  }
-
-  res.json({
-    success: true,
-    data: contentRequest,
-  });
 });
 
 // @desc    Get trending topics
 // @route   GET /api/v1/content/trending
 // @access  Public
 const getTrendingTopics = asyncHandler(async (req, res) => {
-  // This would typically come from an external API or analytics data
-  // For now, returning mock data
-  const trendingTopics = [
-    { topic: 'AI and Machine Learning', count: 1250 },
-    { topic: 'Blockchain Technology', count: 980 },
-    { topic: 'Space Exploration', count: 870 },
-    { topic: 'Climate Change Solutions', count: 760 },
-    { topic: 'Quantum Computing', count: 650 },
-  ];
+  try {
+    // This could be replaced with actual trending data from your DB
+    // For now, we'll return some sample trending topics
+    const trendingTopics = [
+      { topic: 'AI Art Evolution', count: 1250 },
+      { topic: 'Future Cities', count: 980 },
+      { topic: 'Space Exploration', count: 870 },
+      { topic: 'Quantum Physics', count: 750 },
+      { topic: 'Cyberpunk Aesthetics', count: 620 }
+    ];
 
-  res.json({
-    success: true,
-    data: trendingTopics,
-  });
+    res.status(200).json({
+      success: true,
+       trendingTopics
+    });
+  } catch (error) {
+    logger.error(`Error fetching trending topics: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch trending topics'
+    });
+  }
 });
 
 module.exports = {
-  requestContent,
+  createContentRequest,
   getContentRequests,
-  getContentRequest,
-  getTrendingTopics,
+  getTrendingTopics
 };
