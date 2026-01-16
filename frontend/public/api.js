@@ -1,5 +1,5 @@
-// API configuration for unified server
-const API_BASE_URL = '/api/v1'; // Direct API access since both are served from same server
+// API configuration - updated for production
+const API_BASE_URL = 'https://your-render-backend-url.onrender.com/api/v1'; // Replace with your actual Render URL
 
 // API utility functions
 const api = {

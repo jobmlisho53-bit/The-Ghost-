@@ -1,5 +1,5 @@
 {
-  "name": "ghost-youtube-backend",
+  "name": "ghost-creators-backend",
   "version": "1.0.0",
   "description": "Backend API for Ghost Creators",
   "main": "src/app.js",
