@@ -46,8 +46,7 @@
             animation: gridMove 20s linear infinite;
         }
         @keyframes gridMove{
-            0%{ transform: translate(0, 0);}
-            100%{ transform: translate(50px, 50px);}
+            0%{ transform: translate(0, 0);}            100%{ transform: translate(50px, 50px);}
         }
         /* Particle Animation*/
         .particles{
@@ -96,8 +95,7 @@
             width: 100%;
         }
         .login-card::before {
-            content: '';
-            position: absolute;
+            content: '';            position: absolute;
             top: -2px;
             left: -2px;
             right: -2px;
@@ -146,8 +144,7 @@
             transition: all 0.3s;
         }
         .form-group input:focus {
-            outline: none;
-            border-color: var(--cyber-blue);
+            outline: none;            border-color: var(--cyber-blue);
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
         }
         .login-button {
@@ -196,8 +193,7 @@
             margin: 0 10px;
         }
         .switch-form a:hover {
-            text-decoration: underline;
-        }
+            text-decoration: underline;        }
         .back-button {
             position: absolute;
             top: 20px;
@@ -244,6 +240,10 @@
             border-color: #DB4437;
             background: #DB4437;
         }
+        .github-btn {
+            color: #fff;
+            border-color: #333;            background: #333;
+        }
         .error-message {
             color: var(--glitch-red);
             font-size: 0.9rem;
@@ -283,7 +283,7 @@
                     <button class="social-btn google-btn" id="google-login">
                         <i class="fab fa-google"></i> Continue with Google
                     </button>
-                    <button class="social-btn" id="github-login">
+                    <button class="social-btn github-btn" id="github-login">
                         <i class="fab fa-github"></i> Continue with GitHub
                     </button>
                 </div>
@@ -291,8 +291,7 @@
                 <div class="switch-form">
                     Don't have an account? <a href="signup.html">Register</a>
                 </div>
-            </div>
-        </div>
+            </div>        </div>
     </div>
     
     <script src="api.js"></script>
@@ -342,7 +341,6 @@
                 document.getElementById('email-error').style.display = 'block';
                 isValid = false;
             }
-
             if (!password) {
                 document.getElementById('password-error').style.display = 'block';
                 isValid = false;
@@ -385,18 +383,13 @@
             
             // Social login buttons
             document.getElementById('google-login').addEventListener('click', function(){
-                // Simulate Google login
-                alert('Google login would redirect to OAuth flow');
-                // In a real app, this would redirect to your backend's Google OAuth endpoint
-                // window.location.href = '/auth/google';
+                // Call the Google OAuth function from api.js
+                api.googleLogin();
             });
             
             document.getElementById('github-login').addEventListener('click', function(){
-                // Simulate GitHub login
-                alert('GitHub login would redirect to OAuth flow');
-                // In a real app, this would redirect to your backend's GitHub OAuth endpoint
-                // window.location.href = '/auth/github';
-            });
+                // Call the GitHub OAuth function from api.js
+                api.githubLogin();            });
         });
     </script>
 </body>

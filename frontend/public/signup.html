@@ -46,8 +46,7 @@
             animation: gridMove 20s linear infinite;
         }
         @keyframes gridMove{
-            0%{ transform: translate(0, 0);}
-            100%{ transform: translate(50px, 50px);}
+            0%{ transform: translate(0, 0);}            100%{ transform: translate(50px, 50px);}
         }
         /* Particle Animation*/
         .particles{
@@ -96,8 +95,7 @@
             width: 100%;
         }
         .signup-card::before {
-            content: '';
-            position: absolute;
+            content: '';            position: absolute;
             top: -2px;
             left: -2px;
             right: -2px;
@@ -146,8 +144,7 @@
             transition: all 0.3s;
         }
         .form-group input:focus {
-            outline: none;
-            border-color: var(--cyber-blue);
+            outline: none;            border-color: var(--cyber-blue);
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
         }
         .signup-button {
@@ -196,8 +193,7 @@
             border-radius: 10px;
             border: 1px solid rgba(0, 240, 255, 0.3);
             background: rgba(26, 26, 46, 0.6);
-            color: white;
-            font-family: 'Exo 2', sans-serif;
+            color: white;            font-family: 'Exo 2', sans-serif;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
@@ -246,8 +242,7 @@
     
     <div class="signup-container">
         <button class="back-button" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> Back
-        </button>
+            <i class="fas fa-arrow-left"></i> Back        </button>
         
         <div class="signup-card">
             <div class="logo-text">GHOST CREATORS</div>
@@ -288,36 +283,6 @@
     
     <script src="api.js"></script>
     <script>
-        // Check for token in URL (from OAuth redirect)
-        function checkOAuthToken() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token');
-            
-            if (token) {
-                // Store the token and redirect to main app
-                localStorage.setItem('token', token);
-                // Get user profile to store in localStorage
-                fetch('/api/v1/auth/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        localStorage.setItem('user', JSON.stringify(data.data));
-                        window.location.href = 'index.html';
-                    } else {
-                        window.location.href = 'index.html';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching user profile:', error);
-                    window.location.href = 'index.html';
-                });
-            }
-        }
-
         // Create particle background
         function createParticles(){
             const container = document.getElementById('particles');
@@ -326,8 +291,7 @@
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 // Random position
-                particle.style.left = `${Math.random() * 100}%`;
-                // Random size
+                particle.style.left = `${Math.random() * 100}%`;                // Random size
                 const size = 1 + Math.random() * 3;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
@@ -376,8 +340,7 @@
                 isValid = false;
             }
 
-            if (!isValid) {
-                return;
+            if (!isValid) {                return;
             }
 
             try {
@@ -414,9 +377,6 @@
 
         // Initialize particles
         document.addEventListener('DOMContentLoaded', function(){
-            // Check for OAuth token in URL
-            checkOAuthToken();
-            
             createParticles();
             
             // Social signup buttons
@@ -429,7 +389,6 @@
                 // Call the GitHub OAuth function from api.js
                 api.githubLogin();
             });
-        });
-    </script>
+        });    </script>
 </body>
 </html>
