@@ -3,13 +3,13 @@ const logger = require('../utils/logger');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(
-      process.env.NODE_ENV === 'test' 
-        ? process.env.TEST_MONGODB_URI || 'mongodb://localhost:27017/ghost_creators_test'
-        : process.env.MONGODB_URI || 'mongodb://localhost:27017/ghost_creators'
-    );
+    // Connect to MongoDB
+    const mongoConn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-    logger.info(`MongoDB Connected: ${conn.connection.host}`);
+    logger.info(`MongoDB Connected: ${mongoConn.connection.host}`);
   } catch (error) {
     logger.error(`Error: ${error.message}`);
     process.exit(1);

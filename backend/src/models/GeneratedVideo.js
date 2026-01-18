@@ -4,69 +4,29 @@ const generatedVideoSchema = new mongoose.Schema({
   requestId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ContentRequest',
-    required: true,
-    unique: true,
+    required: true
   },
-  title: {
+  videoUrl: {
     type: String,
-    required: [true, 'Title is required'],
-    trim: true,
+    required: true
   },
-  description: {
+  thumbnailUrl: String,
+  duration: Number,
+  aiModelUsed: String,
+  aiSettings: mongoose.Schema.Types.Mixed,
+  status: {
     type: String,
-    trim: true,
+    enum: ['processing', 'completed', 'failed'],
+    default: 'processing'
   },
-  url: {
-    type: String,
-    required: [true, 'Video URL is required'],
-  },
-  thumbnailUrl: {
-    type: String,
-  },
-  duration: {
-    type: Number, // in seconds
-  },
-  size: {
-    type: Number, // in bytes
-  },
-  resolution: {
-    width: Number,
-    height: Number,
-  },
-  format: {
-    type: String,
-    default: 'mp4',
-  },
-  quality: {
-    type: String,
-    enum: ['480p', '720p', '1080p', '4k'],
-    default: '720p',
-  },
-  aiMetadata: {
-    modelUsed: String,
-    generationTime: Date,
-    processingSteps: [String],
-  },
-  moderationStatus: {
-    type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
-  },
-  moderationNotes: String,
-  views: {
+  fileSize: Number,
+  resolution: String,
+  creditsUsed: {
     type: Number,
-    default: 0,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
+    default: 1
+  }
 }, {
-  timestamps: true,
+  timestamps: true
 });
-
-// Index for efficient querying
-generatedVideoSchema.index({ requestId: 1 });
-generatedVideoSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('GeneratedVideo', generatedVideoSchema);

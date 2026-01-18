@@ -1,7 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const ContentRequest = require('../models/ContentRequest');
 const User = require('../models/User');
-const aiService = require('../services/aiService');
+const GeneratedVideo = require('../models/GeneratedVideo');
+const { addToQueue } = require('../services/videoQueue');
 const logger = require('../utils/logger');
 
 // @desc    Create content request
@@ -53,8 +54,8 @@ const createContentRequest = asyncHandler(async (req, res) => {
     // Log the request
     logger.info(`Content request created: ${contentRequest._id} by ${isGuest ? 'guest' : 'user ' + userId}`);
 
-    // Start AI generation process (could be done asynchronously)
-    // aiService.generateContent(contentRequest._id);
+    // Add video generation to queue
+    await addToQueue(contentRequest._id);
 
     res.status(201).json({
       success: true,
@@ -77,6 +78,7 @@ const getContentRequests = asyncHandler(async (req, res) => {
 
   try {
     const contentRequests = await ContentRequest.find({ user: userId })
+      .populate('video', 'videoUrl thumbnailUrl duration status')
       .sort({ createdAt: -1 })
       .limit(50); // Limit to last 50 requests
 
@@ -122,8 +124,35 @@ const getTrendingTopics = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get generated video details
+// @route   GET /api/v1/content/video/:id
+// @access  Private
+const getGeneratedVideo = asyncHandler(async (req, res) => {
+  try {
+    const video = await GeneratedVideo.findById(req.params.id)
+      .populate('requestId', 'topic style language duration');
+
+    if (!video) {
+      res.status(404);
+      throw new Error('Video not found');
+    }
+
+    res.status(200).json({
+      success: true,
+       video
+    });
+  } catch (error) {
+    logger.error(`Error fetching video: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch video'
+    });
+  }
+});
+
 module.exports = {
   createContentRequest,
   getContentRequests,
-  getTrendingTopics
+  getTrendingTopics,
+  getGeneratedVideo
 };

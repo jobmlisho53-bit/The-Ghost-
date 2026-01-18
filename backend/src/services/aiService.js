@@ -1,176 +1,178 @@
-const axios = require('axios');
+const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 const ContentRequest = require('../models/ContentRequest');
 const GeneratedVideo = require('../models/GeneratedVideo');
-const aiConfig = require('../config/ai-config');
 const logger = require('../utils/logger');
 
 class AIService {
   constructor() {
-    this.aiServiceUrl = aiConfig.aiServiceUrl;
-    this.apiKey = aiConfig.aiApiKey;
+    this.modelsPath = process.env.MODELS_PATH || './models';
+    this.outputPath = process.env.OUTPUT_PATH || './output';
+    this.gpuEnabled = process.env.GPU_ENABLED === 'true';
   }
 
-  // Generate content based on request
-  async generateContent(requestId) {
-    try {
-      const request = await ContentRequest.findById(requestId);
-      if (!request) {
-        throw new Error('Content request not found');
+  async generateVideo(prompt, options = {}) {
+    const { style = 'educational', duration = 300, resolution = '1080p' } = options;
+    
+    // Create a job ID for tracking
+    const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Create output directory for this job
+    const jobOutputDir = path.join(this.outputPath, jobId);
+    if (!fs.existsSync(jobOutputDir)) {
+      fs.mkdirSync(jobOutputDir, { recursive: true });
+    }
+
+    return new Promise((resolve, reject) => {
+      // Determine the appropriate model based on style
+      let modelScript;
+      switch (style) {
+        case 'cinematic':
+          modelScript = 'wan2_cinematic.py';
+          break;
+        case 'animation':
+          modelScript = 'ltx2_animation.py';
+          break;
+        default:
+          modelScript = 'wan2_educational.py';
       }
 
+      // Prepare the AI model arguments
+      const args = [
+        modelScript,
+        '--prompt', prompt,
+        '--duration', duration.toString(),
+        '--resolution', resolution,
+        '--output_dir', jobOutputDir,
+        '--gpu', this.gpuEnabled.toString()
+      ];
+
+      // Spawn the AI generation process
+      const aiProcess = spawn('python3', args, {
+        cwd: this.modelsPath,
+        env: process.env
+      });
+
+      let stdout = '';
+      let stderr = '';
+
+      aiProcess.stdout.on('data', (data) => {
+        stdout += data.toString();
+        logger.info(`AI Process: ${data.toString()}`);
+      });
+
+      aiProcess.stderr.on('data', (data) => {
+        stderr += data.toString();
+        logger.error(`AI Process Error: ${data.toString()}`);
+      });
+
+      aiProcess.on('close', (code) => {
+        if (code === 0) {
+          // Find the generated video file
+          const videoFiles = fs.readdirSync(jobOutputDir).filter(file => 
+            file.endsWith('.mp4') || file.endsWith('.avi') || file.endsWith('.mov')
+          );
+
+          if (videoFiles.length > 0) {
+            const videoFile = videoFiles[0];
+            const videoPath = path.join(jobOutputDir, videoFile);
+            
+            // Generate thumbnail
+            const thumbnailPath = path.join(jobOutputDir, 'thumbnail.jpg');
+            this.generateThumbnail(videoPath, thumbnailPath);
+            
+            resolve({
+              videoPath,
+              thumbnailPath,
+              duration: this.estimateDuration(stdout),
+              metadata: { style, resolution, prompt }
+            });
+          } else {
+            reject(new Error('No video file generated'));
+          }
+        } else {
+          reject(new Error(`AI process exited with code ${code}. Error: ${stderr}`));
+        }
+      });
+
+      aiProcess.on('error', (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  generateThumbnail(videoPath, thumbnailPath) {
+    // This would use FFmpeg to generate a thumbnail
+    const ffmpeg = spawn('ffmpeg', [
+      '-i', videoPath,
+      '-ss', '00:00:01.000', // Take thumbnail at 1 second
+      '-vframes', '1',
+      thumbnailPath
+    ]);
+
+    ffmpeg.on('close', (code) => {
+      if (code !== 0) {
+        logger.error(`FFmpeg thumbnail generation failed with code ${code}`);
+      }
+    });
+  }
+
+  estimateDuration(output) {
+    // Parse AI model output to estimate actual duration
+    // This is a simplified implementation
+    const match = output.match(/Duration:\s*(\d+:\d+:\d+)/);
+    if (match) {
+      const time = match[1];
+      const [hours, minutes, seconds] = time.split(':').map(Number);
+      return hours * 3600 + minutes * 60 + seconds;
+    }
+    return 300; // Default to 5 minutes
+  }
+
+  async processContentRequest(requestId) {
+    const request = await ContentRequest.findById(requestId);
+    if (!request) throw new Error('Request not found');
+
+    try {
       // Update status to processing
       request.status = 'processing';
       await request.save();
 
-      // Prepare AI service payload
-      const payload = {
-        topic: request.topic,
-        duration: request.duration,
+      // Generate video using AI models
+      const result = await this.generateVideo(request.topic, {
         style: request.style,
-        language: request.language,
-        request_id: request._id.toString(),
-      };
-
-      // Call AI service
-      const response = await axios.post(`${this.aiServiceUrl}/generate`, payload, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        timeout: 300000, // 5 minutes timeout
+        duration: request.duration,
+        resolution: '1080p'
       });
 
       // Create generated video record
       const generatedVideo = await GeneratedVideo.create({
         requestId: request._id,
-        title: request.topic,
-        url: response.data.video_url,
-        thumbnailUrl: response.data.thumbnail_url,
-        duration: response.data.duration,
-        aiMeta: response.data.ai_meta,
-        moderationStatus: 'pending', // Needs moderation before publishing
+        videoUrl: result.videoPath,
+        thumbnailUrl: result.thumbnailPath,
+        duration: result.duration,
+        aiModelUsed: request.style,
+        aiSettings: result.metadata,
+        status: 'completed'
       });
 
-      // Update content request
+      // Update request
       request.status = 'completed';
       request.video = generatedVideo._id;
-      request.aiResponse = response.data;
       await request.save();
 
-      logger.info(`Content generated successfully for request ${requestId}`);
-
+      logger.info(`Video generation completed for request ${requestId}`);
       return generatedVideo;
     } catch (error) {
-      logger.error(`AI generation failed for request ${requestId}: ${error.message}`);
-
+      logger.error(`Video generation failed for request ${requestId}: ${error.message}`);
+      
       // Update request status to failed
-      try {
-        const request = await ContentRequest.findById(requestId);
-        if (request) {
-          request.status = 'failed';
-          request.aiResponse = { error: error.message };
-          await request.save();
-        }
-      } catch (updateError) {
-        logger.error(`Failed to update request status: ${updateError.message}`);
-      }
-
+      request.status = 'failed';
+      request.error = error.message;
+      await request.save();
+      
       throw error;
-    }
-  }
-
-  // Generate content from request (wrapper function)
-  async generateContentFromRequest(requestId) {
-    return await this.generateContent(requestId);
-  }
-
-  // Get content generation status
-  async getGenerationStatus(requestId) {
-    try {
-      const request = await ContentRequest.findById(requestId)
-        .populate('video', 'url thumbnailUrl duration moderationStatus');
-
-      if (!request) {
-        throw new Error('Content request not found');
-      }
-
-      return {
-        status: request.status,
-        video: request.video,
-        progress: this.calculateProgress(request),
-      };
-    } catch (error) {
-      logger.error(`Failed to get generation status: ${error.message}`);
-      throw error;
-    }
-  }
-
-  // Calculate generation progress (mock implementation)
-  calculateProgress(request) {
-    if (request.status === 'pending') return 10;
-    if (request.status === 'processing') return 50;
-    if (request.status === 'completed') return 100;
-    if (request.status === 'failed') return 0;
-    return 0;
-  }
-
-  // Moderate content
-  async moderateContent(videoId) {
-    try {
-      const video = await GeneratedVideo.findById(videoId);
-      if (!video) {
-        throw new Error('Video not found');
-      }
-
-      // Call moderation service
-      const moderationResponse = await axios.post(`${this.aiServiceUrl}/moderate`, {
-        video_url: video.url,
-        request_id: video.requestId,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      video.moderationStatus = moderationResponse.data.approved ? 'approved' : 'rejected';
-      video.moderationNotes = moderationResponse.data.notes;
-      await video.save();
-
-      // Update content request status if rejected
-      if (video.moderationStatus === 'rejected') {
-        const request = await ContentRequest.findById(video.requestId);
-        if (request) {
-          request.status = 'rejected';
-          await request.save();
-        }
-      }
-
-      return video.moderationStatus;
-    } catch (error) {
-      logger.error(`Content moderation failed: ${error.message}`);
-      throw error;
-    }
-  }
-
-  // Get trending topics from AI service
-  async getTrendingTopics() {
-    try {
-      const response = await axios.get(`${this.aiServiceUrl}/trends`, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-        },
-      });
-
-      return response.data.trends;
-    } catch (error) {
-      logger.error(`Failed to get trending topics: ${error.message}`);
-      // Return mock data as fallback
-      return [
-        { topic: 'AI and Machine Learning', count: 1250 },
-        { topic: 'Blockchain Technology', count: 980 },
-        { topic: 'Space Exploration', count: 870 },
-      ];
     }
   }
 }

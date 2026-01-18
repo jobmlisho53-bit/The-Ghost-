@@ -4,7 +4,8 @@ const guestLimit = require('../middleware/guestLimit');
 const {
   createContentRequest,
   getContentRequests,
-  getTrendingTopics
+  getTrendingTopics,
+  getGeneratedVideo
 } = require('../controllers/contentController');
 
 const router = express.Router();
@@ -20,5 +21,9 @@ router.route('/requests')
 // Public endpoint for trending topics
 router.route('/trending')
   .get(getTrendingTopics);
+
+// Private endpoint for video details
+router.route('/video/:id')
+  .get(protect, getGeneratedVideo);
 
 module.exports = router;

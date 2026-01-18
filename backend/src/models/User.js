@@ -4,71 +4,91 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, 'Please provide a username'],
+    required: [true, 'Username is required'],
     unique: true,
     trim: true,
-    maxlength: [30, 'Username cannot be more than 30 characters'],
+    maxlength: [30, 'Username cannot exceed 30 characters']
   },
   email: {
     type: String,
-    required: [true, 'Please provide an email'],
+    required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
-    match: [
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-      'Please provide a valid email',
-    ],
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   },
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
-    minlength: [6, 'Password must be at least 6 characters'],
-    select: false, // Don't return password in queries by default
+    required: [true, 'Password is required'],
+    minlength: [6, 'Password must be at least 6 characters']
+  },
+  googleId: {
+    type: String,
+    sparse: true // Allows multiple null values but unique non-null values
+  },
+  githubId: {
+    type: String,
+    sparse: true
+  },
+  avatar: {
+    type: String,
+    default: ''
   },
   subscription: {
+    type: {
+      type: String,
+      enum: ['free', 'basic', 'premium'],
+      default: 'free'
+    },
+    startDate: {
+      type: Date,
+      default: Date.now
+    },
+    endDate: Date,
+    isActive: {
+      type: Boolean,
+      default: false
+    }
+  },
+  contentRequests: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Subscription',
+    ref: 'ContentRequest'
+  }],
+  credits: {
+    type: Number,
+    default: 10 // Free users get 10 credits
   },
-  contentRequests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ContentRequest',
-    },
-  ],
-  preferences: {
-    language: {
-      type: String,
-      default: 'en',
-    },
-    contentStyle: {
-      type: String,
-      default: 'educational',
-      enum: ['educational', 'entertainment', 'documentary', 'tutorial'],
-    },
-    maxVideoDuration: {
-      type: Number,
-      default: 600, // 10 minutes
-    },
+  mpesaPhone: {
+    type: String,
+    default: ''
   },
+  paymentHistory: [{
+    transactionId: String,
+    amount: Number,
+    date: {
+      type: Date,
+      default: Date.now
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'completed', 'failed'],
+      default: 'pending'
+    }
+  }],
   isActive: {
     type: Boolean,
-    default: true,
+    default: true
   },
   lastLogin: {
-    type: Date,
-  },
+    type: Date
+  }
 }, {
-  timestamps: true,
+  timestamps: true
 });
 
-// Encrypt password using bcrypt
-userSchema.pre('save', async function (next) {
-  // Only hash password if it's modified (or new)
-  if (!this.isModified('password')) {
-    next();
-    return;
-  }
-
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -78,8 +98,8 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function (enteredPassword) {
+// Compare password method
+userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
