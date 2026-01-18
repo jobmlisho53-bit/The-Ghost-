@@ -1,5 +1,5 @@
 // API configuration - updated for production
-const API_BASE_URL = 'https://your-render-backend-url.onrender.com/api/v1'; // Replace with your actual Render URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1'; // Fallback for development
 
 // API utility functions
 const api = {
@@ -46,8 +46,7 @@ const api = {
         },
       });
       return await response.json();
-    } catch (error) {
-      console.error('Get profile error:', error);
+    } catch (error) {      console.error('Get profile error:', error);
       throw error;
     }
   },
@@ -97,7 +96,6 @@ const api = {
       throw error;
     }
   },
-
   // Get trending topics
   async getTrendingTopics() {
     try {

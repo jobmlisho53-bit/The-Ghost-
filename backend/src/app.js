@@ -46,8 +46,7 @@ app.use(cors({
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
-});
+  message: 'Too many requests from this IP, please try again later.'});
 app.use(limiter);
 
 // Body parsing middleware
@@ -63,18 +62,30 @@ app.use('/api/v1/auth', oauthRoutes); // OAuth routes
 app.use('/api/v1/content', contentRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 
-// Serve static files (frontend)
-app.use(express.static(path.join(__dirname, '../frontend/public')));
-
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Catch-all handler for frontend routes (SPA)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
-});
+// Only serve frontend files in development
+if (process.env.NODE_ENV === 'development') {
+  app.use(express.static(path.join(__dirname, '../frontend/public')));
+  
+  // Catch-all handler for frontend routes in development
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
+  });
+} else {
+  // In production, only API routes are available
+  // Frontend is served separately on Vercel
+  app.get('/', (req, res) => {
+    res.json({ 
+      message: 'Ghost Creators API Server', 
+      status: 'operational',
+      docs: '/api/v1/docs' // Documentation endpoint
+    });
+  });
+}
 
 // Error handling middleware
 app.use(errorHandler);
@@ -83,7 +94,12 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
-  logger.info(`Access the application at http://localhost:${PORT}`);
+  logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    if (process.env.NODE_ENV === 'development') {
+    logger.info(`Access the application at http://localhost:${PORT}`);
+  } else {
+    logger.info(`API server running in production mode`);
+  }
 });
 
 // Graceful shutdown

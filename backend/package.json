@@ -5,45 +5,39 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "dev": "NODE_ENV=development nodemon src/app.js",
     "test": "jest"
   },
-  "keywords": [
-    "ai",
-    "video",
-    "content-generation",
-    "api"
-  ],
+  "keywords": ["ai", "video", "content-generation", "api"],
   "author": "Ghost Creators Team",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.5.0",
-    "bcryptjs": "^2.4.3",
-    "bull": "^4.16.5",
+    "express": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-async-handler": "^1.2.0",
-    "express-rate-limit": "^6.10.0",
-    "express-session": "^1.17.3",
-    "helmet": "^7.0.0",
-    "joi": "^17.9.2",
-    "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
+    "redis": "^4.6.7",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "axios": "^1.5.0",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.10.0",
     "nodemailer": "^6.9.4",
-    "passport": "^0.6.0",
-    "passport-github2": "^0.1.12",
-    "passport-google-oauth20": "^2.0.0",
-    "redis": "^4.7.1",
     "socket.io": "^4.7.2",
-    "winston": "^3.10.0"
+    "joi": "^17.9.2",
+    "winston": "^3.10.0",
+    "express-async-handler": "^1.2.0",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-github2": "^0.1.12",
+    "express-session": "^1.17.3"
   },
   "devDependencies": {
-    "eslint": "^8.47.0",
-    "jest": "^29.6.2",
     "nodemon": "^3.0.1",
-    "prettier": "^3.0.2",
-    "supertest": "^6.3.3"
+    "jest": "^29.6.2",
+    "supertest": "^6.3.3",
+    "eslint": "^8.47.0",
+    "prettier": "^3.0.2"
   }
 }

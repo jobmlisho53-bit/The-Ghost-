@@ -1,11 +1,11 @@
 services:
 - type: web
-  name: ghost-creators-backend
+  name: ghost-creators-api
   env: node
   region: oregon
   plan: free
   buildCommand: npm install
-  startCommand: node src/app.js  # Changed from 'npm start' to avoid nodemon
+  startCommand: npm start
   envVars:
   - key: NODE_ENV
     value: production
@@ -25,3 +25,5 @@ services:
     sync: false
   - key: FRONTEND_URL
     sync: false  # Set to your Vercel frontend URL
+  - key: PORT
+    value: 10000
