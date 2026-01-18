@@ -46,8 +46,7 @@
             background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
             z-index:-3;
-            animation: gridMove 20s linear infinite;
-        }
+            animation: gridMove 20s linear infinite;        }
         @keyframes gridMove{
             0%{ transform: translate(0, 0);}
             100%{ transform: translate(50px, 50px);}
@@ -96,8 +95,7 @@
             background: linear-gradient(to bottom, rgba(6, 6, 26, 0.95), rgba(6, 6, 26, 0.8));
             backdrop-filter: blur(20px);
             padding: 20px 16px;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
         }
         .header-top{
             display: flex;
@@ -146,8 +144,7 @@
             bottom:-8px;
             left: 0;
             font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--matrix-green);
+            letter-spacing: 3px;            color: var(--matrix-green);
             opacity: 0.8;
         }
         .header-controls{
@@ -196,8 +193,7 @@
             color: var(--neon-orange);
             font-size: 1.8rem;
             text-shadow: 0 0 20px rgba(255, 77, 0, 0.5);
-        }
-        .landing-description{
+        }        .landing-description{
             color: rgba(255, 255, 255, 0.8);
             font-size: 1.1rem;
             margin-bottom: 40px;
@@ -246,8 +242,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s;
-        }
-        .cta-button.primary:hover::before{
+        }        .cta-button.primary:hover::before{
             left: 100%;
         }
         .social-login{
@@ -296,8 +291,7 @@
         }
         .login-option a{
             color: var(--cyber-blue);
-            text-decoration: none;
-            margin: 0 5px;
+            text-decoration: none;            margin: 0 5px;
         }
         .login-option a:hover{
             text-decoration: underline;
@@ -346,8 +340,7 @@
         }
         /* Glitch Effects*/
         .glitch-container{
-            position: relative;
-            overflow: hidden;
+            position: relative;            overflow: hidden;
         }
         .glitch{
             position: relative;
@@ -396,8 +389,7 @@
         }
         @keyframes glitch-2{
             0%{ clip: rect(65px, 550px, 119px, 0);}
-            5%{ clip: rect(52px, 550px, 136px, 0);}
-            10%{ clip: rect(78px, 550px, 125px, 0);}
+            5%{ clip: rect(52px, 550px, 136px, 0);}            10%{ clip: rect(78px, 550px, 125px, 0);}
             15%{ clip: rect(43px, 550px, 147px, 0);}
             20%{ clip: rect(82px, 550px, 113px, 0);}
             25%{ clip: rect(27px, 550px, 141px, 0);}
@@ -446,8 +438,7 @@
                     <div class="logo-orb">
                         <div class="logo-orb-inner"></div>
                     </div>
-                    <div class="logo-text">GHOST</div>
-                </div>
+                    <div class="logo-text">GHOST</div>                </div>
             </div>
         </header>
         
@@ -496,8 +487,7 @@
             <div class="social-login">
                 <button class="social-btn google-btn" id="google-login">
                     <i class="fab fa-google"></i> Continue with Google
-                </button>
-                <button class="social-btn github-btn" id="github-login">
+                </button>                <button class="social-btn github-btn" id="github-login">
                     <i class="fab fa-github"></i> Continue with GitHub
                 </button>
                 <button class="social-btn guest-btn" id="guest-login">
@@ -522,7 +512,7 @@
                 // Store the token and redirect to main app
                 localStorage.setItem('token', token);
                 // Get user profile to store in localStorage
-                fetch('/api/v1/auth/profile', {
+                fetch('https://the-ghost-07of.onrender.com/api/v1/auth/profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -546,8 +536,7 @@
         // Create particle background
         function createParticles(){
             const container = document.getElementById('particles');
-            const particleCount = 50;
-            for(let i = 0; i < particleCount; i++){
+            const particleCount = 50;            for(let i = 0; i < particleCount; i++){
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 // Random position
@@ -596,8 +585,7 @@
                 // Random interval between messages
                 const nextInterval = 8000 + Math.random() * 5000;
                 setTimeout(showNextMessage, nextInterval);
-            }
-            showNextMessage();
+            }            showNextMessage();
         }
 
         // Event listeners
@@ -646,8 +634,7 @@
                 background: rgba(0, 0, 0, 0.85);
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                z-index: 2000;
+                justify-content: center;                z-index: 2000;
                 backdrop-filter: blur(10px);
                 animation: fadeIn 0.3s ease;
             `;
@@ -696,8 +683,7 @@
                 position: absolute;
                 bottom: 10px;
                 left: 10px;
-                width: 20px;
-                height: 20px;
+                width: 20px;                height: 20px;
                 border-bottom: 2px solid var(--cyber-blue);
                 border-left: 2px solid var(--cyber-blue);
             `;
@@ -722,7 +708,7 @@
             messageElement.textContent = message;
             messageElement.style.cssText = `
                 color: white;
-                font-family: 'Orbitron', sans-serif;
+                font-family: \'Orbitron\', sans-serif;
                 font-size: 1.5rem;
                 margin-bottom: 20px;
                 line-height: 1.3;
@@ -733,7 +719,7 @@
             status.textContent = 'Ghost Creators AI Processing...';
             status.style.cssText = `
                 color: var(--matrix-green);
-                font-family: 'JetBrains Mono', monospace;
+                font-family: \'JetBrains Mono\', monospace;
                 font-size: 0.9rem;
                 margin-bottom: 30px;
                 animation: pulse 1.5s infinite;
@@ -746,8 +732,7 @@
                 background: linear-gradient(135deg, var(--cyber-blue), var(--hologram-purple));
                 color: #000;
                 border: none;
-                padding: 12px 30px;
-                font-family: 'Orbitron', sans-serif;
+                padding: 12px 30px;                font-family: \'Orbitron\', sans-serif;
                 font-weight: 700;
                 border-radius: 10px;
                 cursor: pointer;
@@ -796,8 +781,7 @@
                 @keyframes fadeIn{ from{ opacity: 0;} to{ opacity: 1;} }
                 @keyframes slideUp{ from{ transform: translateY(30px); opacity: 0;} to{ transform: translateY(0); opacity: 1;} }
                 @keyframes pulse{ 0%, 100%{ opacity: 0.7;} 50%{ opacity: 1;} }
-            `;
-            document.head.appendChild(style);
+            `;            document.head.appendChild(style);
         }
     </script>
 </body>
