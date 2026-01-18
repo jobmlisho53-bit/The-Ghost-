@@ -1,5 +1,5 @@
-// API configuration - updated for production
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1'; // Fallback for development
+// API configuration for production - using your Render backend
+const API_BASE_URL = 'https://the-ghost-07of.onrender.com/api/v1'; // Your Render backend URL
 
 // API utility functions
 const api = {
