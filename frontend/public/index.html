@@ -844,7 +844,7 @@
                         <span class="guest-indicator" id="guest-indicator" style="display:none;">GUEST</span>
                         <span class="generation-counter" id="generation-counter"></span>
                         <a href="dashboard.html" class="profile-link">
-                            <i class="fas fa-user-circle header-icon"></i>
+                            <i class="fas fa-user-circle header-icon" id="profile-icon"></i>
                         </a>
                     </div>
                 </div>
@@ -1382,6 +1382,19 @@
                     }
                 });
             });
+            
+            // Profile icon click (separate handler)
+            document.getElementById('profile-icon').addEventListener('click', function(e){
+                e.preventDefault(); // Prevent default anchor behavior
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    // Not logged in, go to login
+                    window.location.href = 'login.html';
+                } else {
+                    // Logged in, go to profile/dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            });
         });
 
         // AI Preview Modal
@@ -1405,8 +1418,7 @@
 
             // Create preview card
             const preview = document.createElement('div');
-            preview.style.cssText = `
-                background: linear-gradient(135deg, rgba(6, 6, 26, 0.95), rgba(26, 26, 46, 0.95));
+            preview.style.cssText = `                background: linear-gradient(135deg, rgba(6, 6, 26, 0.95), rgba(26, 26, 46, 0.95));
                 border-radius: 20px;
                 padding: 40px;
                 max-width: 400px;
@@ -1418,6 +1430,7 @@
                 overflow: hidden;
                 animation: slideUp 0.4s ease;
             `;
+
             // Add decorative elements
             const cornerTL = document.createElement('div');
             cornerTL.style.cssText = `
@@ -1454,8 +1467,7 @@
 
             const cornerBR = document.createElement('div');
             cornerBR.style.cssText = `
-                position: absolute;
-                bottom: 10px;
+                position: absolute;                bottom: 10px;
                 right: 10px;
                 width: 20px;
                 height: 20px;
@@ -1467,7 +1479,8 @@
             const aiIcon = document.createElement('div');
             aiIcon.innerHTML = '<i class="fas fa-robot" style="font-size: 3rem; color: var(--matrix-green); margin-bottom: 20px;"></i>';
 
-            // Message            const messageElement = document.createElement('h3');
+            // Message
+            const messageElement = document.createElement('h3');
             messageElement.textContent = message;
             messageElement.style.cssText = `
                 color: white;
@@ -1503,7 +1516,6 @@
                 transition: all 0.3s;
                 letter-spacing: 1px;
             `;
-
             closeButton.addEventListener('mouseover', function(){
                 this.style.transform = 'scale(1.05)';
                 this.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.5)';
@@ -1517,6 +1529,7 @@
             closeButton.addEventListener('click', function(){
                 document.body.removeChild(overlay);
             });
+
             // Assemble preview
             preview.appendChild(cornerTL);
             preview.appendChild(cornerTR);
