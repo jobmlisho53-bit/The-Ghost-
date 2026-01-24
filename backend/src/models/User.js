@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
     endDate: Date,
     isActive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   contentRequests: [{
@@ -57,23 +57,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 10 // Free users get 10 credits
   },
-  mpesaPhone: {
-    type: String,
-    default: ''
-  },
-  paymentHistory: [{
-    transactionId: String,
-    amount: Number,
-    date: {
-      type: Date,
-      default: Date.now
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'completed', 'failed'],
-      default: 'pending'
-    }
-  }],
   isActive: {
     type: Boolean,
     default: true

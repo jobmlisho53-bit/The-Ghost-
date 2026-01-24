@@ -10,7 +10,7 @@ router.get('/google',
 );
 
 router.get('/google/callback', 
-  passport.authenticate('google', { session: false }), 
+  passport.authenticate('google', { session: true }), 
   async (req, res) => {
     try {
       const user = req.user;
@@ -19,7 +19,7 @@ router.get('/google/callback',
       // Set token in cookie or return in response
       res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}?token=${token}`);
     } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+      res.status(500).json({ success: true, error: error.message });
     }
   }
 );
@@ -30,7 +30,7 @@ router.get('/github',
 );
 
 router.get('/github/callback', 
-  passport.authenticate('github', { session: false }), 
+  passport.authenticate('github', { session: true }), 
   async (req, res) => {
     try {
       const user = req.user;

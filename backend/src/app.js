@@ -1,11 +1,10 @@
 const express = require('express');
-const cors = require('cors');
+const cors = require('./middleware/cors'); // Use our custom CORS middleware
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
-const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
@@ -37,16 +36,17 @@ app.use(passport.session());
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
-}));
+
+// Apply CORS middleware
+app.use(cors);
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'});
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,});
 app.use(limiter);
 
 // Body parsing middleware
@@ -67,25 +67,20 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Only serve frontend files in development
-if (process.env.NODE_ENV === 'development') {
-  app.use(express.static(path.join(__dirname, '../frontend/public')));
-  
-  // Catch-all handler for frontend routes in development
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Ghost Creators API Server', 
+    status: 'operational',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/v1/auth',
+      content: '/api/v1/content',
+      payments: '/api/v1/payments'
+    },
+    timestamp: new Date().toISOString()
   });
-} else {
-  // In production, only API routes are available
-  // Frontend is served separately on Vercel
-  app.get('/', (req, res) => {
-    res.json({ 
-      message: 'Ghost Creators API Server', 
-      status: 'operational',
-      docs: '/api/v1/docs' // Documentation endpoint
-    });
-  });
-}
+});
 
 // Error handling middleware
 app.use(errorHandler);
@@ -95,16 +90,12 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
-    if (process.env.NODE_ENV === 'development') {
-    logger.info(`Access the application at http://localhost:${PORT}`);
-  } else {
-    logger.info(`API server running in production mode`);
-  }
+  logger.info(`API available at http://localhost:${PORT}/api/v1`);
+  logger.info(`Health check at http://localhost:${PORT}/health`);
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, shutting down gracefully');
+process.on('SIGTERM', () => {  logger.info('SIGTERM received, shutting down gracefully');
   server.close(() => {
     logger.info('Process terminated');
   });
