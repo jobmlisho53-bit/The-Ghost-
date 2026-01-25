@@ -1,4 +1,4 @@
-// API configuration for production - using your Render backend
+// API configuration - Production backend
 const API_BASE_URL = 'https://the-ghost-07of.onrender.com/api/v1'; // Your Render backend URL
 
 // API utility functions
@@ -6,47 +6,58 @@ const api = {
   // Register a new user
   async register(userData) {
     try {
+      console.log('Attempting registration with:', userData);
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(userData),
       });
-      return await response.json();
+      
+      const result = await response.json();
+      console.log('Registration response:', result);
+      return result;
     } catch (error) {
       console.error('Registration error:', error);
-      throw error;
+      return { success: false, error: error.message };
     }
   },
 
   // Login user
   async login(credentials) {
     try {
+      console.log('Attempting login with:', credentials);
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(credentials),
       });
-      return await response.json();
+      
+      const result = await response.json();
+      console.log('Login response:', result);
+      return result;
     } catch (error) {
       console.error('Login error:', error);
-      throw error;
+      return { success: false, error: error.message };
     }
   },
-
   // Get user profile (requires token)
   async getUserProfile(token) {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
         },
       });
       return await response.json();
-    } catch (error) {      console.error('Get profile error:', error);
+    } catch (error) {
+      console.error('Get profile error:', error);
       throw error;
     }
   },
@@ -60,6 +71,7 @@ const api = {
       // Add guest header if applicable
       const headers = {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       };
       
       if (token) {
@@ -83,11 +95,11 @@ const api = {
   },
 
   // Get user's video requests (requires token)
-  async getUserRequests(token) {
-    try {
+  async getUserRequests(token) {    try {
       const response = await fetch(`${API_BASE_URL}/content/requests`, {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
         },
       });
       return await response.json();
@@ -96,6 +108,7 @@ const api = {
       throw error;
     }
   },
+
   // Get trending topics
   async getTrendingTopics() {
     try {

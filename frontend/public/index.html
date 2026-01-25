@@ -840,7 +840,7 @@
                     <i class="fas fa-search header-icon"></i>
                     <i class="fas fa-bell header-icon notification"></i>
                     <div class="user-info">
-                        <span class="user-name" id="display-name">User</span>
+                        <span class="user-name" id="display-name">Guest</span>
                         <span class="guest-indicator" id="guest-indicator" style="display:none;">GUEST</span>
                         <span class="generation-counter" id="generation-counter"></span>
                         <a href="dashboard.html" class="profile-link">
@@ -863,7 +863,7 @@
                     <span class="headline-sub">OF AI-CREATED VIDEOS</span>
                 </h1>
                 <p class="welcome-message">
-                    Welcome back, <span id="user-greeting">User</span>! Ready to create something amazing?
+                    Welcome back, <span id="user-greeting">Guest</span>! Ready to create something amazing?
                 </p>
                 
                 <!-- Guest Notice -->
@@ -1108,15 +1108,6 @@
             const user = localStorage.getItem('user');
             const isGuest = localStorage.getItem('isGuest');
             
-            if (!token && !isGuest) {
-                // Redirect to landing page if not authenticated and not a guest
-                // Only redirect if we're not already on the landing page
-                if (!window.location.href.includes('landing.html')) {
-                    window.location.href = 'landing.html';
-                }
-                return;
-            }
-            
             if (token && user) {
                 // User is logged in, display their info
                 const userData = JSON.parse(user);
@@ -1124,9 +1115,20 @@
                 document.getElementById('user-greeting').textContent = userData.username;
                 
                 // Hide guest indicator
-                document.getElementById('guest-indicator').style.display = 'none';                document.getElementById('guest-notice').style.display = 'none';
+                document.getElementById('guest-indicator').style.display = 'none';
+                document.getElementById('guest-notice').style.display = 'none';
             } else if (isGuest) {
                 // Guest user
+                document.getElementById('display-name').textContent = 'Guest';
+                document.getElementById('user-greeting').textContent = 'Guest';
+                
+                // Show guest indicator
+                document.getElementById('guest-indicator').style.display = 'inline';
+                document.getElementById('guest-notice').style.display = 'block';                
+                // Update generation counter
+                updateGuestGenerationCount();
+            } else {
+                // Not authenticated, show as guest
                 document.getElementById('display-name').textContent = 'Guest';
                 document.getElementById('user-greeting').textContent = 'Guest';
                 
@@ -1171,9 +1173,9 @@
                 const colors = [
                     'var(--cyber-blue)',
                     'var(--neon-orange)',
-                    'var(--matrix-green)',
-                    'var(--hologram-purple)'
-                ];                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    'var(--matrix-green)',                    'var(--hologram-purple)'
+                ];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                 // Random animation
                 const duration = 3 + Math.random() * 7;
                 const delay = Math.random() * 5;
@@ -1220,12 +1222,21 @@
                 console.error('Error loading trending topics:', error);
             }
         }
-
         async function handleVideoRequest(topic, duration = 300, style = 'educational', language = 'en') {
-            // Get token from localStorage (assuming user is logged in)            const token = localStorage.getItem('token');
+            // Get token from localStorage (assuming user is logged in)
+            const token = localStorage.getItem('token');
             const isGuest = localStorage.getItem('isGuest');
             
-            if (!token && isGuest) {
+            // If not authenticated at all, redirect to signup/login
+            if (!token && !isGuest) {
+                showAIPreview('Please sign up or log in to generate videos');
+                setTimeout(() => {
+                    window.location.href = 'signup.html';
+                }, 2000);
+                return;
+            }
+            
+            if (isGuest) {
                 // Check if guest has reached daily limit
                 let count = parseInt(localStorage.getItem('guestGenerationCount') || '0');
                 if (count >= 3) {
@@ -1246,15 +1257,6 @@
                     counterEl.textContent = `${count}/3`;
                 }
             }
-            
-            if (!token && !isGuest) {
-                // Not logged in, redirect to login
-                showAIPreview('Please log in to request a video');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
-                return;
-            }
 
             try {
                 showAIPreview(`Requesting AI video for: ${topic}`);
@@ -1269,9 +1271,9 @@
                     showAIPreview(`Video request submitted successfully! Request ID: ${response.data._id}`);
                 } else if (response.error && response.error.includes('Daily limit reached')) {
                     // Handle daily limit error specifically
-                    showAIPreview('Daily limit reached! Guests can only generate 3 videos per day. Please sign up for unlimited access.');
-                    setTimeout(() => {
-                        window.location.href = 'signup.html';                    }, 2000);
+                    showAIPreview('Daily limit reached! Guests can only generate 3 videos per day. Please sign up for unlimited access.');                    setTimeout(() => {
+                        window.location.href = 'signup.html';
+                    }, 2000);
                 } else {
                     showAIPreview(`Error: ${response.error}`);
                 }
@@ -1318,9 +1320,9 @@
                 });
             });
             
-            // Tab interactions
-            const feedTabs = document.querySelectorAll('.feed-tab');
-            feedTabs.forEach(tab => {                tab.addEventListener('click', function(){
+            // Tab interactions            const feedTabs = document.querySelectorAll('.feed-tab');
+            feedTabs.forEach(tab => {
+                tab.addEventListener('click', function(){
                     feedTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     const filter = this.textContent;
@@ -1367,9 +1369,9 @@
                     if (this.dataset.nav === 'profile') {
                         const token = localStorage.getItem('token');
                         if (!token) {
-                            // Not logged in, go to login
-                            window.location.href = 'login.html';
-                        } else {                            // Logged in, go to profile/dashboard
+                            // Not logged in, go to login                            window.location.href = 'login.html';
+                        } else {
+                            // Logged in, go to profile/dashboard
                             window.location.href = 'dashboard.html';
                         }
                         e.preventDefault();
@@ -1416,9 +1418,9 @@
                 animation: fadeIn 0.3s ease;
             `;
 
-            // Create preview card
-            const preview = document.createElement('div');
-            preview.style.cssText = `                background: linear-gradient(135deg, rgba(6, 6, 26, 0.95), rgba(26, 26, 46, 0.95));
+            // Create preview card            const preview = document.createElement('div');
+            preview.style.cssText = `
+                background: linear-gradient(135deg, rgba(6, 6, 26, 0.95), rgba(26, 26, 46, 0.95));
                 border-radius: 20px;
                 padding: 40px;
                 max-width: 400px;
@@ -1465,9 +1467,9 @@
                 border-left: 2px solid var(--cyber-blue);
             `;
 
-            const cornerBR = document.createElement('div');
-            cornerBR.style.cssText = `
-                position: absolute;                bottom: 10px;
+            const cornerBR = document.createElement('div');            cornerBR.style.cssText = `
+                position: absolute;
+                bottom: 10px;
                 right: 10px;
                 width: 20px;
                 height: 20px;
@@ -1514,8 +1516,8 @@
                 border-radius: 10px;
                 cursor: pointer;
                 transition: all 0.3s;
-                letter-spacing: 1px;
-            `;
+                letter-spacing: 1px;            `;
+
             closeButton.addEventListener('mouseover', function(){
                 this.style.transform = 'scale(1.05)';
                 this.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.5)';
