@@ -133,3 +133,11 @@ const api = {
 
 // Export the API object
 window.api = api;
+
+// Make sure API is available globally
+if (typeof window !== 'undefined') {
+  window.api = api;
+}
+
+// Log when API is loaded
+console.log('API module loaded successfully');
