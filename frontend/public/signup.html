@@ -151,7 +151,7 @@
             width: 100%;
             padding: 16px;
             background: linear-gradient(135deg, var(--cyber-blue), var(--hologram-purple));
-            color: #000;
+            color:#000;
             border: none;
             border-radius: 10px;
             font-family: 'Orbitron', sans-serif;
@@ -357,9 +357,9 @@
                 const response = await api.register({ username, email, password });
                 console.log('Registration response:', response);
                 
-                if (response.success) {
-                    localStorage.setItem('token', response.token);
-                    localStorage.setItem('user', JSON.stringify(response));
+                if (response.success && response.data) {
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('user', JSON.stringify(response.data));
                     
                     // Show success message
                     document.getElementById('success-message').style.display = 'block';
